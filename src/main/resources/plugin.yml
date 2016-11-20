@@ -1,0 +1,23 @@
+name: ${project.artifactId}
+description: ${project.description}
+main: ${project.groupId}.${project.artifactId}.${project.artifactId}
+version: ${project.version}-git-${env.GIT_COMMIT}
+author: 喵♂呜
+website: ${ciManagement.url}
+softdepend:
+- PlaceholderAPI
+commands:
+  ${project.artifactId}:
+    description: ${project.artifactId} - ${project.description}
+    aliases: []
+    usage: §b使用/${project.artifactId} help 查看帮助!
+permissions:
+  ${project.artifactId}.default:
+    description: ${project.artifactId} 默认权限!
+    default: true
+  ${project.artifactId}.admin:
+    description: ${project.artifactId} 管理员权限!
+    default: op
+  ${project.artifactId}.reload:
+    description: 重新载入插件!
+    default: op

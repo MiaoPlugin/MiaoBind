@@ -1,0 +1,16 @@
+#配置文件版本 请勿修改
+Version: 1.0
+
+#数据库信息
+Data:
+  #数据保存方式 [sqlite|MySQL]
+  FileSystem: sqlite
+  #MySQL数据库配置 只有当FileSystem配置为MySQL时有效
+  MySQL:
+    #数据库需要自行建立
+    database: minecraft
+    tablename: ${project.artifactId}
+    username: root
+    password: root
+    ip: localhost
+    port: 3306

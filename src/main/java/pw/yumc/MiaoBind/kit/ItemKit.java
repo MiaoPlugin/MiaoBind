@@ -1,17 +1,18 @@
 package pw.yumc.MiaoBind.kit;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.config.Tag;
 import pw.yumc.MiaoBind.event.BindItemEvent;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ItemKit {
     private static Config Config;
@@ -182,12 +183,21 @@ public class ItemKit {
         return itemStack;
     }
 
+    public static void bindArmor(Player player) {
+        for (final ItemStack armor : player.getInventory().getArmorContents()) {
+            if (armor != null && getItemType(armor) == ItemType.BIND_ON_EQUIP) {
+                bindItem(player, armor);
+            }
+        }
+        player.getInventory().setArmorContents(player.getInventory().getArmorContents());
+    }
+
     public enum ItemType {
-        BIND_ON_EQUIP,
-        BIND_ON_PICKUP,
-        BIND_ON_USE,
         NORMAL,
-        MiaoBind
+        MiaoBind,
+        BIND_ON_USE,
+        BIND_ON_EQUIP,
+        BIND_ON_PICKUP
     }
 
     public static class ArmorKit {

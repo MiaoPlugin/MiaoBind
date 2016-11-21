@@ -9,7 +9,7 @@ softdepend:
 commands:
   ${project.artifactId}:
     description: ${project.artifactId} - ${project.description}
-    aliases: []
+    aliases: [mbind]
     usage: §b使用/${project.artifactId} help 查看帮助!
 permissions:
   ${project.artifactId}.default:

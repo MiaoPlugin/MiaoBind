@@ -61,8 +61,11 @@
                         <configuration>
                             <options>
                                 <option>-repackageclasses \ʼ.ʽ.ʾ.${project.artifactId}</option>
-                                <option>-keep class ${project.groupId}.${project.artifactId}.${project.artifactId}</option>
-                                <option>-keep class ${project.groupId}.${project.artifactId}.${project.artifactId}Bungee</option>
+                                <option>-keep class ${project.groupId}.${project.artifactId}.${project.artifactId}
+                                </option>
+                                <option>-keep class
+                                    ${project.groupId}.${project.artifactId}.${project.artifactId}Bungee
+                                </option>
                             </options>
                             <libs>
                                 <lib>${java.home}/lib/rt.jar</lib>
@@ -101,7 +104,7 @@
             <groupId>pw.yumc</groupId>
             <artifactId>YumCore</artifactId>
             <type>jar</type>
-            <version>1.3</version>
+            <version>1.5</version>
         </dependency>
     </dependencies>
 </project>

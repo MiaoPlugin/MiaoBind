@@ -1,16 +1,36 @@
 #配置文件版本 请勿修改
 Version: 1.0
 
-#数据库信息
-Data:
-  #数据保存方式 [sqlite|MySQL]
-  FileSystem: sqlite
-  #MySQL数据库配置 只有当FileSystem配置为MySQL时有效
-  MySQL:
-    #数据库需要自行建立
-    database: minecraft
-    tablename: ${project.artifactId}
-    username: root
-    password: root
-    ip: localhost
-    port: 3306
+#绑定显示样式
+Style:
+  #隐藏玩家名称
+  HideName: false
+  #到期时间格式
+  DateFormat: 'yyyy-MM-dd HH:mm:ss'
+
+#绑定标签处理
+#注意 检查标签为全部 绑定标签为第一个
+Tag:
+  Bind:
+  - '§6喵式绑定'
+  - '§6灵魂绑定'
+  - '§6SoulBound'
+  TimeBind:
+  - '§6到期时间'
+  BindOnPickup:
+  - '§4拾取后绑定'
+  BindOnUse:
+  - '§4使用后绑定'
+  BindOnEquip:
+  - '§4装备后绑定'
+
+#设置
+Setting:
+  #死亡不掉落绑定物品
+  #注意: 前提是服务器开启死亡掉落 不然全部不会掉落
+  KeepOnDeath: true
+  #不允许丢弃
+  PreventDrop: true
+  #丢弃后删除
+  DeleteOnDrop: false
+

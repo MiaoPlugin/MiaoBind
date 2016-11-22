@@ -1,20 +1,23 @@
 package pw.yumc.MiaoBind.kit;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import pw.yumc.MiaoBind.config.Config;
-import pw.yumc.MiaoBind.config.Tag;
-import pw.yumc.MiaoBind.event.BindItemEvent;
-
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import pw.yumc.MiaoBind.config.Config;
+import pw.yumc.MiaoBind.config.Tag;
+import pw.yumc.MiaoBind.event.BindItemEvent;
+
 public class ItemKit {
+    private static String TimeTag = "§卐 ";
     private static Config Config;
     private static Tag Tag;
 
@@ -44,6 +47,7 @@ public class ItemKit {
     public static ItemType getItemType(final ItemStack itemStack) {
         if (itemStack != null) {
             if (isBind(itemStack)) { return ItemType.MiaoBind; }
+            if (isBindOnTime(itemStack)) { return ItemType.MiaoTimeBind; }
             if (isBindOnPickup(itemStack)) { return ItemType.BIND_ON_PICKUP; }
             if (isBindOnUse(itemStack)) { return ItemType.BIND_ON_USE; }
             if (isBindOnEquip(itemStack)) { return ItemType.BIND_ON_EQUIP; }
@@ -69,16 +73,20 @@ public class ItemKit {
     }
 
     public static boolean isBindOnTime(final ItemStack itemStack) {
+        return getBindTimeIndex(itemStack) != -1;
+    }
+
+    public static int getBindTimeIndex(final ItemStack itemStack) {
         try {
             List<String> lores = itemStack.getItemMeta().getLore();
             for (String tag : Tag.TimeBind) {
                 for (String lore : lores) {
-                    if (lore.startsWith(tag)) { return true; }
+                    if (lore.startsWith(tag)) { return lores.indexOf(lore); }
                 }
             }
         } catch (NullPointerException ignored) {
         }
-        return false;
+        return -1;
     }
 
     public static boolean isBindOnTag(final ItemStack itemStack, List<String> tags) {
@@ -98,6 +106,44 @@ public class ItemKit {
 
     public static boolean isBind(final ItemStack itemStack) {
         return isBindOnTag(itemStack, Tag.Bind) || isBindOnTime(itemStack);
+    }
+
+    /**
+     * 判断物品是否有效
+     * 
+     * @param itemStack
+     *            物品
+     * @return 是否有效
+     */
+    public static boolean isValidItem(final ItemStack itemStack) {
+        long time = getBindTime(itemStack);
+        return time == 0 || time > System.currentTimeMillis();
+    }
+
+    /**
+     * 获得物品过期时间戳
+     * 
+     * @param itemStack
+     *            物品
+     * @return 绑定时间 <br>
+     *         -1 错误的格式<br>
+     *         0 非时间绑定
+     * 
+     */
+    public static long getBindTime(final ItemStack itemStack) {
+        int index = getBindTimeIndex(itemStack);
+        if (index != -1) {
+            String time = itemStack.getItemMeta().getLore().get(index);
+            if (time.contains(TimeTag)) {
+                String date = time.split(TimeTag)[1];
+                try {
+                    Config.DateFormat.parse(date).getTime();
+                } catch (ParseException e) {
+                    return -1;
+                }
+            }
+        }
+        return 0;
     }
 
     public static ItemStack bindItem(final Player player, ItemStack itemStack) {
@@ -143,7 +189,7 @@ public class ItemKit {
         if (!lores.isEmpty()) {
             removeTag(lores);
         }
-        lores.add(Tag.TimeBind.get(0) + "§卐" + Config.DateFormat.format(new Date()));
+        lores.add(Tag.TimeBind.get(0) + TimeTag + Config.DateFormat.format(new Date()));
         lores.add(Config.HideName ? addColorChar(player.getName()) : player.getName());
         itemMeta.setLore(lores);
         itemStack.setItemMeta(itemMeta);
@@ -210,8 +256,13 @@ public class ItemKit {
 
     public static void bindArmor(Player player) {
         for (final ItemStack armor : player.getInventory().getArmorContents()) {
-            if (armor != null && getItemType(armor) == ItemType.BIND_ON_EQUIP) {
-                bindItem(player, armor);
+            if (armor != null) {
+                ItemType type = getItemType(armor);
+                if (type == ItemType.BIND_ON_EQUIP) {
+                    bindItem(player, armor);
+                } else if (type == ItemType.MiaoTimeBind && !ItemKit.isValidItem(armor)) {
+                    armor.setType(Material.AIR);
+                }
             }
         }
         player.getInventory().setArmorContents(player.getInventory().getArmorContents());
@@ -220,6 +271,7 @@ public class ItemKit {
     public enum ItemType {
         NORMAL,
         MiaoBind,
+        MiaoTimeBind,
         BIND_ON_USE,
         BIND_ON_EQUIP,
         BIND_ON_PICKUP

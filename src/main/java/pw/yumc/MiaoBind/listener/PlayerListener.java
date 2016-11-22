@@ -8,8 +8,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.UpdateInventory;
@@ -27,6 +30,19 @@ public class PlayerListener implements Listener {
             sound = Sound.valueOf("ITEM_BREAK");
         }
         Bukkit.getPluginManager().registerEvents(this, P.instance);
+    }
+
+    @EventHandler
+    public void onPlayerHeldItem(PlayerItemHeldEvent event) {
+        PlayerInventory inv = event.getPlayer().getInventory();
+        ItemStack pre = inv.getItem(event.getPreviousSlot());
+        if (!ItemKit.isValidItem(pre)) {
+            inv.setItem(event.getPreviousSlot(), null);
+        }
+        ItemStack newi = inv.getItem(event.getNewSlot());
+        if (!ItemKit.isValidItem(newi)) {
+            inv.setItem(event.getNewSlot(), null);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

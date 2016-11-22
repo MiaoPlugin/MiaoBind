@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.ItemStack;
+
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.CheckArmor;
@@ -35,12 +36,9 @@ public class InventoryListener implements Listener {
         final InventoryType inventoryType = event.getInventory().getType();
         if (inventoryType == null) { return; }
         if (ItemKit.getItemType(itemStack) != ItemKit.ItemType.MiaoBind) { return; }
-        if (!config.AllowStore && inventoryType != InventoryType.CRAFTING) {
+        if ((!config.AllowStore && inventoryType != InventoryType.CRAFTING) || (!ItemKit.isBindedPlayer(player, itemStack) && !player.isOp())) {
             event.setCancelled(true);
-            return;
         }
-        if (ItemKit.isBindedPlayer(player, itemStack) || player.isOp()) { return; }
-        event.setCancelled(true);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -68,7 +66,7 @@ public class InventoryListener implements Listener {
      *            The event to check
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    private void onEnchantItem(final EnchantItemEvent event) {
+    public void onEnchantItem(final EnchantItemEvent event) {
         final Player player = event.getEnchanter();
         final ItemStack itemStack = event.getItem();
         if (ItemKit.isBindOnUse(itemStack)) {
@@ -77,7 +75,7 @@ public class InventoryListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    void onInventoryClick(final InventoryClickEvent event) {
+    public void onInventoryClick(final InventoryClickEvent event) {
         final HumanEntity entity = event.getWhoClicked();
         final ItemStack itemStack = event.getCurrentItem();
         final SlotType slotType = event.getSlotType();

@@ -1,8 +1,13 @@
 package pw.yumc.MiaoBind;
 
+import java.text.ParseException;
+
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+
+import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.commands.annotation.Cmd;
@@ -17,6 +22,7 @@ import pw.yumc.YumCore.commands.interfaces.Executor;
  * @author 喵♂呜
  */
 public class Command implements Executor {
+    private Config Config;
     boolean newVersion = true;
     {
         try {
@@ -24,6 +30,10 @@ public class Command implements Executor {
         } catch (NoSuchMethodException e) {
             newVersion = false;
         }
+    }
+
+    public Command(Config config) {
+        Config = config;
     }
 
     public ItemStack getItemInHand(Player player) {
@@ -46,11 +56,26 @@ public class Command implements Executor {
         Log.sender(player, "§a物品绑定成功!");
     }
 
-    @Cmd(executor = Cmd.Executor.PLAYER)
+    @Cmd(minimumArguments = 1, executor = Cmd.Executor.PLAYER)
     @Help("绑定时限物品")
     public void bindtime(Player player, String name, String time) {
-
-        Log.sender(player, "bindtime");
+        Player target = player;
+        if (time == null) {
+            time = name;
+        } else {
+            target = Bukkit.getPlayerExact(name);
+        }
+        if (target == null) {
+            Log.sender(player, "§c玩家 §b%s §c不存在或不在线!", name);
+            return;
+        }
+        try {
+            Config.DateFormat.parse(time);
+        } catch (ParseException e) {
+            Log.sender(player, "§c时间 §e%s §c格式不正确 应为 §e%s!", time, Config.DateFormat);
+            return;
+        }
+        Log.sender(player, "§a物品时间绑定成功 将于 §e%s §a过期!", time);
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "ub")

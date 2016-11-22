@@ -1,5 +1,6 @@
 package pw.yumc.MiaoBind.listener;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -9,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.UpdateInventory;
@@ -22,10 +22,11 @@ public class PlayerListener implements Listener {
     public PlayerListener(Config config) {
         this.config = config;
         try {
-            sound = Sound.valueOf("ITEM_BREAK");
+            sound = Sound.valueOf("ITEM_SHIELD_BREAK");
         } catch (IllegalArgumentException e) {
-            sound = Sound.ITEM_SHIELD_BREAK;
+            sound = Sound.valueOf("ITEM_BREAK");
         }
+        Bukkit.getPluginManager().registerEvents(this, P.instance);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

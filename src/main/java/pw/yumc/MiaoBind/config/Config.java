@@ -17,4 +17,6 @@ public class Config extends InjectConfig {
     public Boolean PreventDrop;
     @ConfigNode("Setting.DeleteOnDrop")
     public Boolean DeleteOnDrop;
+    @ConfigNode("Setting.AllowStore")
+    public Boolean AllowStore;
 }

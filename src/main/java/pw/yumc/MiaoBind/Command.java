@@ -6,6 +6,8 @@ import org.bukkit.inventory.PlayerInventory;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.commands.annotation.Cmd;
+import pw.yumc.YumCore.commands.annotation.Help;
+import pw.yumc.YumCore.commands.annotation.Option;
 import pw.yumc.YumCore.commands.interfaces.Executor;
 
 /**
@@ -33,41 +35,69 @@ public class Command implements Executor {
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER)
-    public void bind(Player player, Player target) {
-        PlayerInventory a = player.getInventory();
+    @Help("绑定物品")
+    public void bind(Player player, @Option("check") Player target) {
         ItemStack is = getItemInHand(player);
         if (ItemKit.isBind(is)) {
             Log.sender(player, "§c物品已绑定 请勿重复操作!");
             return;
         }
-        if (target == null) {
-            Log.sender(player, "§c玩家 §b%s §c不在线或不存在!");
-            return;
-        }
+        ItemKit.bindItem(target == null ? player : target, is);
+        Log.sender(player, "§a物品绑定成功!");
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER)
+    @Help("绑定时限物品")
     public void bindtime(Player player, String name, String time) {
+
         Log.sender(player, "bindtime");
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "ub")
+    @Help("解绑物品")
     public void unbind(Player player) {
-        Log.sender(player, "unbind");
+        ItemStack is = getItemInHand(player);
+        if (!ItemKit.isBind(is)) {
+            Log.sender(player, "§c物品未绑定 操作失败!");
+            return;
+        }
+        ItemKit.unbindItem(is);
+        Log.sender(player, "§a物品解绑成功!");
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "bop")
+    @Help("拾取时绑定物品")
     public void bindonpickup(Player player) {
-        Log.sender(player, "bindonpickup");
+        ItemStack is = getItemInHand(player);
+        if (ItemKit.isBind(is)) {
+            Log.sender(player, "§c物品已绑定 请勿重复操作!");
+            return;
+        }
+        ItemKit.bopItem(is);
+        Log.sender(player, "§a物品已设定为 拾取时绑定物品!");
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "boe")
+    @Help("装备时绑定物品")
     public void bindonequip(Player player) {
-        Log.sender(player, "bindonequip");
+        ItemStack is = getItemInHand(player);
+        if (ItemKit.isBind(is)) {
+            Log.sender(player, "§c物品已绑定 请勿重复操作!");
+            return;
+        }
+        ItemKit.boeItem(is);
+        Log.sender(player, "§a物品已设定为 装备时绑定物品!");
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "bou")
+    @Help("使用时绑定物品")
     public void bindonuse(Player player) {
-        Log.sender(player, "bindonuse");
+        ItemStack is = getItemInHand(player);
+        if (ItemKit.isBind(is)) {
+            Log.sender(player, "§c物品已绑定 请勿重复操作!");
+            return;
+        }
+        ItemKit.bouItem(is);
+        Log.sender(player, "§a物品已设定为 使用时绑定物品!");
     }
 }

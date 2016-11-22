@@ -1,18 +1,18 @@
 package pw.yumc.MiaoBind.kit;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.config.Tag;
 import pw.yumc.MiaoBind.event.BindItemEvent;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public class ItemKit {
     private static Config Config;
@@ -53,7 +53,7 @@ public class ItemKit {
 
     public static boolean isBindedPlayer(final Player player, final ItemStack itemStack) {
         final List<String> itemLore = itemStack.getItemMeta().getLore();
-        return itemLore.contains(player.getName()) || itemLore.contains(player.getName().replaceAll("_", " "));
+        return itemLore.contains(player.getName()) || itemLore.contains(addColorChar(player.getName())) || itemLore.contains(player.getName().replaceAll("_", " "));
     }
 
     public static boolean isBindOnEquip(final ItemStack itemStack) {
@@ -119,6 +119,31 @@ public class ItemKit {
             removeTag(lores);
         }
         lores.add(Tag.Bind.get(0));
+        lores.add(Config.HideName ? addColorChar(player.getName()) : player.getName());
+        itemMeta.setLore(lores);
+        itemStack.setItemMeta(itemMeta);
+        return itemStack;
+    }
+
+    public static ItemStack bindTimeItem(final Player player, ItemStack itemStack) {
+        if (itemStack == null) { return null; }
+        if (isBind(itemStack)) { return itemStack; }
+        final BindItemEvent bindItemEvent = new BindItemEvent(player, itemStack);
+        Bukkit.getPluginManager().callEvent(bindItemEvent);
+        itemStack = bindItemEvent.getItemStack();
+        if (bindItemEvent.isCancelled()) { return itemStack; }
+        List<String> lores = new ArrayList<>();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null) {
+            itemMeta = Bukkit.getItemFactory().getItemMeta(itemStack.getType());
+        }
+        if (itemMeta.hasLore()) {
+            lores.addAll(itemMeta.getLore());
+        }
+        if (!lores.isEmpty()) {
+            removeTag(lores);
+        }
+        lores.add(Tag.TimeBind.get(0) + "§卐" + Config.DateFormat.format(new Date()));
         lores.add(Config.HideName ? addColorChar(player.getName()) : player.getName());
         itemMeta.setLore(lores);
         itemStack.setItemMeta(itemMeta);

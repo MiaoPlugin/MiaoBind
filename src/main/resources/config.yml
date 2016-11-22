@@ -33,4 +33,7 @@ Setting:
   PreventDrop: true
   #丢弃后删除
   DeleteOnDrop: false
+  #是否允许放到容器里
+  AllowStore: true
+
 

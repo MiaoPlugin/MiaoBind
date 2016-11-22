@@ -5,6 +5,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
+import pw.yumc.MiaoBind.listener.ArmorStandListener;
+import pw.yumc.MiaoBind.listener.InventoryListener;
+import pw.yumc.MiaoBind.listener.PlayerListener;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.commands.CommandMain;
 import pw.yumc.YumCore.commands.CommandSub;
@@ -28,6 +31,9 @@ public class MiaoBind extends JavaPlugin implements Executor {
     public void onEnable() {
         new CommandMain(new Command());
         new CommandSub("MiaoBind", this);
+        new ArmorStandListener();
+        new PlayerListener(config);
+        new InventoryListener(config);
     }
 
     @Override

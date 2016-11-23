@@ -1,6 +1,7 @@
 package pw.yumc.MiaoBind.listener;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -8,13 +9,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
+import pw.yumc.MiaoBind.runnable.CheckArmor;
 import pw.yumc.MiaoBind.runnable.UpdateInventory;
 import pw.yumc.YumCore.bukkit.P;
 
@@ -45,6 +47,25 @@ public class PlayerListener implements Listener {
         }
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onInteract(PlayerInteractEvent event) {
+        PlayerInventory inv = event.getPlayer().getInventory();
+        ItemStack item = event.getItem();
+        switch (ItemKit.getItemType(item)) {
+        case MiaoTimeBind:
+            if (!ItemKit.isValidItem(item)) {
+                item.setType(Material.AIR);
+            }
+            return;
+        case BIND_ON_USE:
+            ItemKit.bindItem(event.getPlayer(), item);
+            return;
+        }
+        if (ItemKit.ArmorKit.isEquipable(item)) {
+            new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onItemDrop(final PlayerDropItemEvent event) {
         final Player player = event.getPlayer();
@@ -68,14 +89,21 @@ public class PlayerListener implements Listener {
         final Player player = event.getPlayer();
         final Item item = event.getItem();
         final ItemStack itemStack = item.getItemStack();
-        if (ItemKit.isBind(itemStack) && !ItemKit.isBindedPlayer(player, itemStack)) {
-            if (!player.isOp()) {
+        switch (ItemKit.getItemType(itemStack)) {
+        case MiaoBind:
+            if (!ItemKit.isBindedPlayer(player, itemStack) && !player.isOp()) {
                 event.setCancelled(true);
+                return;
             }
-            return;
-        }
-        if (ItemKit.isBindOnPickup(itemStack)) {
+            break;
+        case MiaoTimeBind:
+            if (!ItemKit.isValidItem(itemStack)) {
+                itemStack.setType(Material.AIR);
+            }
+            break;
+        case BIND_ON_PICKUP:
             ItemKit.bindItem(player, itemStack);
+            break;
         }
         if (player.getItemOnCursor() != null && ItemKit.isBind(player.getItemOnCursor())) {
             item.setPickupDelay(40);

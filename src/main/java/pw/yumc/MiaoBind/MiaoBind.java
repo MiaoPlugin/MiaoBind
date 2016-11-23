@@ -29,7 +29,7 @@ public class MiaoBind extends JavaPlugin implements Executor {
 
     @Override
     public void onEnable() {
-        new CommandMain(new Command());
+        new CommandMain(new Command(config));
         new CommandSub("MiaoBind", this);
         new ArmorStandListener();
         new PlayerListener(config);

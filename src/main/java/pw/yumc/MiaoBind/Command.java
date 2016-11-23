@@ -1,12 +1,9 @@
 package pw.yumc.MiaoBind;
 
-import java.text.ParseException;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.YumCore.bukkit.Log;
@@ -14,6 +11,8 @@ import pw.yumc.YumCore.commands.annotation.Cmd;
 import pw.yumc.YumCore.commands.annotation.Help;
 import pw.yumc.YumCore.commands.annotation.Option;
 import pw.yumc.YumCore.commands.interfaces.Executor;
+
+import java.text.ParseException;
 
 /**
  * 命令类
@@ -75,7 +74,7 @@ public class Command implements Executor {
             Log.sender(player, "§c时间 §e%s §c格式不正确 应为 §e%s!", time, Config.DateFormat);
             return;
         }
-        Log.sender(player, "§a物品时间绑定成功 将于 §e%s §a过期!", time);
+        Log.sender(player, "§a物品已设定为 §c时间绑定 将于 §e%s §a过期!", time);
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "ub")
@@ -99,7 +98,7 @@ public class Command implements Executor {
             return;
         }
         ItemKit.bopItem(is);
-        Log.sender(player, "§a物品已设定为 拾取时绑定物品!");
+        Log.sender(player, "§a物品已设定为 §c拾取时绑定物品!");
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "boe")
@@ -111,7 +110,7 @@ public class Command implements Executor {
             return;
         }
         ItemKit.boeItem(is);
-        Log.sender(player, "§a物品已设定为 装备时绑定物品!");
+        Log.sender(player, "§a物品已设定为 §c装备时绑定物品!");
     }
 
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "bou")
@@ -123,6 +122,6 @@ public class Command implements Executor {
             return;
         }
         ItemKit.bouItem(is);
-        Log.sender(player, "§a物品已设定为 使用时绑定物品!");
+        Log.sender(player, "§a物品已设定为 §c使用时绑定物品!");
     }
 }

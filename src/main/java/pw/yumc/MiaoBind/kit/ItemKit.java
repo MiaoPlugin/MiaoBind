@@ -1,20 +1,20 @@
 package pw.yumc.MiaoBind.kit;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.config.Tag;
 import pw.yumc.MiaoBind.event.BindItemEvent;
+import pw.yumc.YumCore.bukkit.Log;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 public class ItemKit {
     private static String TimeTag = "§卐 ";
@@ -57,6 +57,7 @@ public class ItemKit {
 
     public static boolean isBindedPlayer(final Player player, final ItemStack itemStack) {
         final List<String> itemLore = itemStack.getItemMeta().getLore();
+        // 最后一个用于兼容Ess的生成物品
         return itemLore.contains(player.getName()) || itemLore.contains(addColorChar(player.getName())) || itemLore.contains(player.getName().replaceAll("_", " "));
     }
 
@@ -149,6 +150,7 @@ public class ItemKit {
     public static ItemStack bindItem(final Player player, ItemStack itemStack) {
         if (itemStack == null) { return null; }
         if (isBind(itemStack)) { return itemStack; }
+        Log.d("玩家 %s 绑定物品 %s", player, itemStack);
         final BindItemEvent bindItemEvent = new BindItemEvent(player, itemStack);
         Bukkit.getPluginManager().callEvent(bindItemEvent);
         itemStack = bindItemEvent.getItemStack();
@@ -174,6 +176,7 @@ public class ItemKit {
     public static ItemStack bindTimeItem(final Player player, ItemStack itemStack) {
         if (itemStack == null) { return null; }
         if (isBind(itemStack)) { return itemStack; }
+        Log.d("玩家 %s 绑定时限物品 %s", player, itemStack);
         final BindItemEvent bindItemEvent = new BindItemEvent(player, itemStack);
         Bukkit.getPluginManager().callEvent(bindItemEvent);
         itemStack = bindItemEvent.getItemStack();
@@ -213,6 +216,7 @@ public class ItemKit {
 
     public static ItemStack unbindItem(final ItemStack itemStack) {
         if (itemStack == null) { return null; }
+        Log.d("解绑物品 %s", itemStack);
         final ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta.hasLore() && isBind(itemStack)) {
             List<String> itemLore = new ArrayList<>();
@@ -252,20 +256,6 @@ public class ItemKit {
         itemMeta.setLore(itemLore);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
-    }
-
-    public static void bindArmor(Player player) {
-        for (final ItemStack armor : player.getInventory().getArmorContents()) {
-            if (armor != null) {
-                ItemType type = getItemType(armor);
-                if (type == ItemType.BIND_ON_EQUIP) {
-                    bindItem(player, armor);
-                } else if (type == ItemType.MiaoTimeBind && !ItemKit.isValidItem(armor)) {
-                    armor.setType(Material.AIR);
-                }
-            }
-        }
-        player.getInventory().setArmorContents(player.getInventory().getArmorContents());
     }
 
     public enum ItemType {

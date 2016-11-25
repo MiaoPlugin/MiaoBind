@@ -14,6 +14,7 @@ import pw.yumc.YumCore.commands.annotation.Option;
 import pw.yumc.YumCore.commands.interfaces.Executor;
 
 import java.text.ParseException;
+import java.util.Date;
 
 /**
  * 命令类
@@ -64,6 +65,11 @@ public class Command implements Executor {
     @Help("绑定时限物品")
     public void bindtime(Player player, String name, String time) {
         Player target = player;
+        ItemStack is = getItemInHand(player);
+        if (is == null || is.getType() == Material.AIR) {
+            Log.sender(player, "§c空手无法进行操作!");
+            return;
+        }
         if (time == null) {
             time = name;
         } else {
@@ -76,9 +82,10 @@ public class Command implements Executor {
         try {
             Config.DateFormat.parse(time);
         } catch (ParseException e) {
-            Log.sender(player, "§c时间 §e%s §c格式不正确 应为 §e%s!", time, Config.DateFormat);
+            Log.sender(player, "§c时间 §e%s §c格式不正确 应为 §e%s!", time, Config.DateFormat.format(new Date()));
             return;
         }
+        ItemKit.bindTimeItem(player, is, time);
         Log.sender(player, "§a物品已设定为 §c时间绑定 将于 §e%s §a过期!", time);
     }
 

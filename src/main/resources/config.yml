@@ -24,6 +24,12 @@ Tag:
   BindOnEquip:
   - '§4装备后绑定'
 
+#检查装备栏
+CheckArmor:
+  #特殊命令(一些可以直接装备的命令)
+  Command:
+  - '/hat'
+
 #设置
 Setting:
   #死亡不掉落绑定物品

@@ -1,20 +1,20 @@
 package pw.yumc.MiaoBind.kit;
 
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.config.Tag;
 import pw.yumc.MiaoBind.event.BindItemEvent;
 import pw.yumc.YumCore.bukkit.Log;
-
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 
 public class ItemKit {
     private static String TimeTag = "§卐 ";
@@ -45,7 +45,7 @@ public class ItemKit {
     }
 
     public static ItemType getItemType(final ItemStack itemStack) {
-        if (itemStack != null) {
+        if (itemStack != null && itemStack.getType() != Material.AIR) {
             if (isBind(itemStack)) {
                 Log.d("判断为绑定物品");
                 return ItemType.MiaoBind;
@@ -150,11 +150,12 @@ public class ItemKit {
     public static long getBindTime(final ItemStack itemStack) {
         int index = getBindTimeIndex(itemStack);
         if (index != -1) {
+            Log.d("判断为时间绑定物品!");
             String time = itemStack.getItemMeta().getLore().get(index);
             if (time.contains(TimeTag)) {
-                String date = time.split(TimeTag)[1];
+                String date = time.split(TimeTag, 1)[1];
                 try {
-                    Config.DateFormat.parse(date).getTime();
+                    return Config.DateFormat.parse(date).getTime();
                 } catch (ParseException e) {
                     return -1;
                 }
@@ -189,7 +190,7 @@ public class ItemKit {
         return itemStack;
     }
 
-    public static ItemStack bindTimeItem(final Player player, ItemStack itemStack) {
+    public static ItemStack bindTimeItem(final Player player, ItemStack itemStack, String time) {
         if (itemStack == null) { return null; }
         if (isBind(itemStack)) { return itemStack; }
         Log.d("玩家 %s 绑定时限物品 %s", player, itemStack);
@@ -208,7 +209,7 @@ public class ItemKit {
         if (!lores.isEmpty()) {
             removeTag(lores);
         }
-        lores.add(Tag.TimeBind.get(0) + TimeTag + Config.DateFormat.format(new Date()));
+        lores.add(Tag.TimeBind.get(0) + TimeTag + time);
         lores.add(Config.HideName ? addColorChar(player.getName()) : player.getName());
         itemMeta.setLore(lores);
         itemStack.setItemMeta(itemMeta);
@@ -371,7 +372,7 @@ public class ItemKit {
          * @return true if the item is equipable, false otherwise
          */
         public static boolean isEquipable(final ItemStack is) {
-            return isMinecraftArmor(is) || is.getType() == Material.SKULL_ITEM || is.getType() == Material.JACK_O_LANTERN;
+            return !(is == null || is.getType() == Material.AIR) && (isMinecraftArmor(is) || is.getType() == Material.SKULL_ITEM || is.getType() == Material.JACK_O_LANTERN);
         }
     }
 }

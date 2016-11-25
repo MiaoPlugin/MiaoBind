@@ -83,7 +83,6 @@ public class InventoryListener implements Listener {
         if (itemStack == null || itemStack.getType() == Material.AIR) {
             itemStack = event.getCurrentItem();
         }
-        if (itemStack == null || itemStack.getType() == Material.AIR) { return; }
         if (entity instanceof Player) {
             final Player player = (Player) entity;
             switch (slotType) {

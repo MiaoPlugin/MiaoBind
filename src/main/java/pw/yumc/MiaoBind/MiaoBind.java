@@ -33,7 +33,7 @@ public class MiaoBind extends JavaPlugin implements Executor {
     public void onEnable() {
         main = new CommandMain(new Command(config));
         new CommandSub("MiaoBind", this);
-        new DeathListener();
+        new DeathListener(config);
         new ArmorStandListener();
         new PlayerListener(config);
         new InventoryListener(config);

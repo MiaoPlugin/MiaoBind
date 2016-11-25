@@ -18,6 +18,7 @@ import pw.yumc.YumCore.commands.interfaces.Executor;
 
 public class MiaoBind extends JavaPlugin implements Executor {
     private Config config;
+    private CommandMain main;
 
     @Override
     public FileConfiguration getConfig() {
@@ -30,7 +31,7 @@ public class MiaoBind extends JavaPlugin implements Executor {
 
     @Override
     public void onEnable() {
-        new CommandMain(new Command(config));
+        main = new CommandMain(new Command(config));
         new CommandSub("MiaoBind", this);
         new DeathListener();
         new ArmorStandListener();
@@ -42,6 +43,12 @@ public class MiaoBind extends JavaPlugin implements Executor {
     public void onLoad() {
         config = new Config();
         ItemKit.init(config);
+    }
+
+    @Cmd(permission = "MiaoBind.admin", aliases = "?")
+    @Help("查看全局帮助")
+    public void allhelp(final CommandSender sender) {
+        main.onCommand(sender, null, "miaobind", new String[] { "?" });
     }
 
     @Cmd(permission = "MiaoBind.reload")

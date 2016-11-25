@@ -18,6 +18,7 @@ import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.CheckArmor;
 import pw.yumc.MiaoBind.runnable.UpdateInventory;
+import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
 
 public class PlayerListener implements Listener {
@@ -47,10 +48,12 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
+        Log.d("PlayerInteractEvent");
         PlayerInventory inv = event.getPlayer().getInventory();
         ItemStack item = event.getItem();
+        if (item == null || item.getType() == Material.AIR) { return; }
         switch (ItemKit.getItemType(item)) {
         case MiaoTimeBind:
             if (!ItemKit.isValidItem(item)) {
@@ -60,9 +63,10 @@ public class PlayerListener implements Listener {
         case BIND_ON_USE:
             ItemKit.bindItem(event.getPlayer(), item);
             return;
-        }
-        if (ItemKit.ArmorKit.isEquipable(item)) {
-            new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
+        case BIND_ON_EQUIP:
+            if (ItemKit.ArmorKit.isEquipable(item)) {
+                new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
+            }
         }
     }
 

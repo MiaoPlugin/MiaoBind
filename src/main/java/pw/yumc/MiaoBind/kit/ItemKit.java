@@ -46,12 +46,28 @@ public class ItemKit {
 
     public static ItemType getItemType(final ItemStack itemStack) {
         if (itemStack != null) {
-            if (isBind(itemStack)) { return ItemType.MiaoBind; }
-            if (isBindOnTime(itemStack)) { return ItemType.MiaoTimeBind; }
-            if (isBindOnPickup(itemStack)) { return ItemType.BIND_ON_PICKUP; }
-            if (isBindOnUse(itemStack)) { return ItemType.BIND_ON_USE; }
-            if (isBindOnEquip(itemStack)) { return ItemType.BIND_ON_EQUIP; }
+            if (isBind(itemStack)) {
+                Log.d("判断为绑定物品");
+                return ItemType.MiaoBind;
+            }
+            if (isBindOnTime(itemStack)) {
+                Log.d("判断为时间绑定物品");
+                return ItemType.MiaoTimeBind;
+            }
+            if (isBindOnPickup(itemStack)) {
+                Log.d("判断为拾取绑定物品");
+                return ItemType.BIND_ON_PICKUP;
+            }
+            if (isBindOnUse(itemStack)) {
+                Log.d("判断为使用绑定物品");
+                return ItemType.BIND_ON_USE;
+            }
+            if (isBindOnEquip(itemStack)) {
+                Log.d("判断为装备绑定物品");
+                return ItemType.BIND_ON_EQUIP;
+            }
         }
+        Log.d("判断为普通物品");
         return ItemType.NORMAL;
     }
 

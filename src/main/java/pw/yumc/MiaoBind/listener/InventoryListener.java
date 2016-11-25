@@ -1,6 +1,7 @@
 package pw.yumc.MiaoBind.listener;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,10 +14,10 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.ItemStack;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.CheckArmor;
+import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
 
 public class InventoryListener implements Listener {
@@ -33,10 +34,9 @@ public class InventoryListener implements Listener {
         if (!(entity instanceof Player)) { return; }
         final Player player = (Player) entity;
         final ItemStack itemStack = event.getCurrentItem();
-        final InventoryType inventoryType = event.getInventory().getType();
-        if (inventoryType == null) { return; }
         if (ItemKit.getItemType(itemStack) != ItemKit.ItemType.MiaoBind) { return; }
-        if ((!config.AllowStore && inventoryType != InventoryType.CRAFTING) || (!ItemKit.isBindedPlayer(player, itemStack) && !player.isOp())) {
+        final InventoryType inventoryType = event.getInventory().getType();
+        if ((!config.AllowStore && inventoryType != InventoryType.CRAFTING && inventoryType != InventoryType.ANVIL) || (!ItemKit.isBindedPlayer(player, itemStack) && !player.isOp())) {
             event.setCancelled(true);
         }
     }
@@ -76,12 +76,14 @@ public class InventoryListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onInventoryClick(final InventoryClickEvent event) {
-        final HumanEntity entity = event.getWhoClicked();
-        final ItemStack itemStack = event.getCurrentItem();
-        final SlotType slotType = event.getSlotType();
-        final InventoryType inventoryType = event.getInventory().getType();
-        if (inventoryType == null) { return; }
-        if (itemStack == null) { return; }
+        Log.d("InventoryClickEvent Action: %s Click: %s SlotType: %s", event.getAction().name(), event.getClick().name(), event.getSlotType().name());
+        HumanEntity entity = event.getWhoClicked();
+        ItemStack itemStack = event.getCursor();
+        SlotType slotType = event.getSlotType();
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
+            itemStack = event.getCurrentItem();
+        }
+        if (itemStack == null || itemStack.getType() == Material.AIR) { return; }
         if (entity instanceof Player) {
             final Player player = (Player) entity;
             switch (slotType) {
@@ -93,12 +95,9 @@ public class InventoryListener implements Listener {
                 if (itemType == ItemKit.ItemType.BIND_ON_PICKUP) {
                     ItemKit.bindItem(player, itemStack);
                 }
-            default:
-                if (ItemKit.ArmorKit.isEquipable(itemStack) && event.isShiftClick()) {
-                    new CheckArmor(player).runTaskLater(P.instance, 2);
-                    return;
-                }
-                break;
+            }
+            if (ItemKit.ArmorKit.isEquipable(itemStack) && event.isShiftClick()) {
+                new CheckArmor(player).runTaskLater(P.instance, 2);
             }
         }
     }

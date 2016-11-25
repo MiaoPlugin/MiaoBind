@@ -1,6 +1,7 @@
 package pw.yumc.MiaoBind;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -47,6 +48,10 @@ public class Command implements Executor {
     @Help("绑定物品")
     public void bind(Player player, @Option("check") Player target) {
         ItemStack is = getItemInHand(player);
+        if (is == null || is.getType() == Material.AIR) {
+            Log.sender(player, "§c空手无法进行操作!");
+            return;
+        }
         if (ItemKit.isBind(is)) {
             Log.sender(player, "§c物品已绑定 请勿重复操作!");
             return;

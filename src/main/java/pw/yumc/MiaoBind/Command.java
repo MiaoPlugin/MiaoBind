@@ -45,31 +45,21 @@ public class Command implements Executor {
         }
     }
 
-    @Cmd(executor = Cmd.Executor.PLAYER)
+    @Cmd(executor = Cmd.Executor.PLAYER, permission = "miaobind.bind")
     @Help("绑定物品")
     public void bind(Player player, @Option("check") Player target) {
-        ItemStack is = getItemInHand(player);
-        if (is == null || is.getType() == Material.AIR) {
-            Log.sender(player, "§c空手无法进行操作!");
-            return;
-        }
-        if (ItemKit.isBind(is)) {
-            Log.sender(player, "§c物品已绑定 请勿重复操作!");
-            return;
-        }
+        ItemStack is = check(player);
+        if (is == null) { return; }
         ItemKit.bindItem(target == null ? player : target, is);
         Log.sender(player, "§a物品绑定成功!");
     }
 
-    @Cmd(minimumArguments = 1, executor = Cmd.Executor.PLAYER)
+    @Cmd(minimumArguments = 2, executor = Cmd.Executor.PLAYER)
     @Help("绑定时限物品")
     public void bindtime(Player player, String name, String time) {
         Player target = player;
-        ItemStack is = getItemInHand(player);
-        if (is == null || is.getType() == Material.AIR) {
-            Log.sender(player, "§c空手无法进行操作!");
-            return;
-        }
+        ItemStack is = check(player);
+        if (is == null) { return; }
         if (time == null) {
             time = name;
         } else {
@@ -104,11 +94,8 @@ public class Command implements Executor {
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "bop")
     @Help("拾取时绑定物品")
     public void bindonpickup(Player player) {
-        ItemStack is = getItemInHand(player);
-        if (ItemKit.isBind(is)) {
-            Log.sender(player, "§c物品已绑定 请勿重复操作!");
-            return;
-        }
+        ItemStack is = check(player);
+        if (is == null) { return; }
         ItemKit.bopItem(is);
         Log.sender(player, "§a物品已设定为 §c拾取时绑定物品!");
     }
@@ -116,11 +103,8 @@ public class Command implements Executor {
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "boe")
     @Help("装备时绑定物品")
     public void bindonequip(Player player) {
-        ItemStack is = getItemInHand(player);
-        if (ItemKit.isBind(is)) {
-            Log.sender(player, "§c物品已绑定 请勿重复操作!");
-            return;
-        }
+        ItemStack is = check(player);
+        if (is == null) { return; }
         ItemKit.boeItem(is);
         Log.sender(player, "§a物品已设定为 §c装备时绑定物品!");
     }
@@ -128,12 +112,23 @@ public class Command implements Executor {
     @Cmd(executor = Cmd.Executor.PLAYER, aliases = "bou")
     @Help("使用时绑定物品")
     public void bindonuse(Player player) {
-        ItemStack is = getItemInHand(player);
-        if (ItemKit.isBind(is)) {
-            Log.sender(player, "§c物品已绑定 请勿重复操作!");
-            return;
-        }
+        ItemStack is = check(player);
+        if (is == null) { return; }
         ItemKit.bouItem(is);
         Log.sender(player, "§a物品已设定为 §c使用时绑定物品!");
     }
+
+    private ItemStack check(Player player) {
+        ItemStack is = getItemInHand(player);
+        if (is == null || is.getType() == Material.AIR) {
+            Log.sender(player, "§c空手无法进行操作!");
+            return null;
+        }
+        if (ItemKit.isBind(is)) {
+            Log.sender(player, "§c物品已绑定 请勿重复操作!");
+            return null;
+        }
+        return is;
+    }
+
 }

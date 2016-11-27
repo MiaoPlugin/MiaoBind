@@ -45,7 +45,7 @@ public class Command implements Executor {
         }
     }
 
-    @Cmd(executor = Cmd.Executor.PLAYER, permission = "miaobind.bind")
+    @Cmd(executor = Cmd.Executor.PLAYER, permission = "MiaoBind.bind")
     @Help("绑定物品")
     public void bind(Player player, @Option("check") Player target) {
         ItemStack is = check(player);
@@ -54,7 +54,7 @@ public class Command implements Executor {
         Log.sender(player, "§a物品绑定成功!");
     }
 
-    @Cmd(minimumArguments = 2, executor = Cmd.Executor.PLAYER)
+    @Cmd(minimumArguments = 2, executor = Cmd.Executor.PLAYER, permission = "MiaoBind.bindtime")
     @Help("绑定时限物品")
     public void bindtime(Player player, String name, String time) {
         Player target = player;
@@ -79,7 +79,7 @@ public class Command implements Executor {
         Log.sender(player, "§a物品已设定为 §c时间绑定 将于 §e%s §a过期!", time);
     }
 
-    @Cmd(executor = Cmd.Executor.PLAYER, aliases = "ub")
+    @Cmd(executor = Cmd.Executor.PLAYER, aliases = "ub", permission = "MiaoBind.unbind")
     @Help("解绑物品")
     public void unbind(Player player) {
         ItemStack is = getItemInHand(player);
@@ -91,7 +91,7 @@ public class Command implements Executor {
         Log.sender(player, "§a物品解绑成功!");
     }
 
-    @Cmd(executor = Cmd.Executor.PLAYER, aliases = "bop")
+    @Cmd(executor = Cmd.Executor.PLAYER, aliases = "bop", permission = "MiaoBind.bindonpickup")
     @Help("拾取时绑定物品")
     public void bindonpickup(Player player) {
         ItemStack is = check(player);
@@ -100,7 +100,7 @@ public class Command implements Executor {
         Log.sender(player, "§a物品已设定为 §c拾取时绑定物品!");
     }
 
-    @Cmd(executor = Cmd.Executor.PLAYER, aliases = "boe")
+    @Cmd(executor = Cmd.Executor.PLAYER, aliases = "boe", permission = "MiaoBind.bindonequip")
     @Help("装备时绑定物品")
     public void bindonequip(Player player) {
         ItemStack is = check(player);
@@ -109,7 +109,7 @@ public class Command implements Executor {
         Log.sender(player, "§a物品已设定为 §c装备时绑定物品!");
     }
 
-    @Cmd(executor = Cmd.Executor.PLAYER, aliases = "bou")
+    @Cmd(executor = Cmd.Executor.PLAYER, aliases = "bou", permission = "MiaoBind.bindonuse")
     @Help("使用时绑定物品")
     public void bindonuse(Player player) {
         ItemStack is = check(player);

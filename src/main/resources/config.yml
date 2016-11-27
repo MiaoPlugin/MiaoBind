@@ -9,7 +9,8 @@ Style:
   DateFormat: 'yyyy-MM-dd HH:mm:ss'
 
 #绑定标签处理
-#注意 检查标签为全部 绑定标签为第一个
+#检查操作 检索所有标签
+#绑定操作 使用第一个标签
 Tag:
   Bind:
   - '§6喵式绑定'

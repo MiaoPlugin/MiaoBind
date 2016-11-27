@@ -12,6 +12,9 @@ commands:
     aliases: [mbind]
     usage: §b使用/${project.artifactId} help 查看帮助!
 permissions:
+  ${project.artifactId}.keepondeath:
+    description: 死亡保留物品权限!
+    default: true
   ${project.artifactId}.default:
     description: ${project.artifactId} 默认权限!
     default: true

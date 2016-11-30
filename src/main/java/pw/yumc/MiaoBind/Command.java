@@ -11,6 +11,7 @@ import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.commands.annotation.Cmd;
 import pw.yumc.YumCore.commands.annotation.Help;
 import pw.yumc.YumCore.commands.annotation.Option;
+import pw.yumc.YumCore.commands.annotation.Sort;
 import pw.yumc.YumCore.commands.interfaces.Executor;
 
 import java.text.ParseException;
@@ -45,6 +46,7 @@ public class Command implements Executor {
         }
     }
 
+    @Sort(1)
     @Cmd(executor = Cmd.Executor.PLAYER, permission = "MiaoBind.bind")
     @Help("绑定物品")
     public void bind(Player player, @Option("check") Player target) {
@@ -54,6 +56,7 @@ public class Command implements Executor {
         Log.sender(player, "§a物品绑定成功!");
     }
 
+    @Sort(2)
     @Cmd(minimumArguments = 2, executor = Cmd.Executor.PLAYER, permission = "MiaoBind.bindtime")
     @Help("绑定时限物品")
     public void bindtime(Player player, String name, String time) {

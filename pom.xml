@@ -49,7 +49,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--<plugin>
+            <plugin>
                 <groupId>com.github.wvengen</groupId>
                 <artifactId>proguard-maven-plugin</artifactId>
                 <executions>
@@ -61,11 +61,8 @@
                         <configuration>
                             <options>
                                 <option>-repackageclasses \ʼ.ʽ.ʾ.${project.artifactId}</option>
-                                <option>-keep class ${project.groupId}.${project.artifactId}.${project.artifactId}
-                                </option>
-                                <option>-keep class
-                                    ${project.groupId}.${project.artifactId}.${project.artifactId}Bungee
-                                </option>
+                                <option>-keep class ${project.groupId}.${project.artifactId}.${project.artifactId}</option>
+                                <option>-keep class ${project.groupId}.${project.artifactId}.${project.artifactId}Bungee</option>
                             </options>
                             <libs>
                                 <lib>${java.home}/lib/rt.jar</lib>
@@ -73,7 +70,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>
     <ciManagement>

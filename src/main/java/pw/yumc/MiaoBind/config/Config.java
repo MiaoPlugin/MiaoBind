@@ -1,19 +1,19 @@
 package pw.yumc.MiaoBind.config;
 
-import org.bukkit.inventory.ItemStack;
-import pw.yumc.YumCore.config.annotation.ConfigNode;
-import pw.yumc.YumCore.config.inject.InjectConfig;
-
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import pw.yumc.YumCore.config.annotation.ConfigNode;
+import pw.yumc.YumCore.config.annotation.ReadOnly;
+import pw.yumc.YumCore.config.inject.InjectConfig;
 
 public class Config extends InjectConfig {
     @ConfigNode("Style.HideName")
     public Boolean HideName;
+    @ReadOnly
     @ConfigNode("Style.DateFormat")
     public SimpleDateFormat DateFormat;
+    @ReadOnly
     public Tag Tag;
     @ConfigNode("Setting.KeepOnDeath")
     public Boolean KeepOnDeath;
@@ -25,6 +25,4 @@ public class Config extends InjectConfig {
     public Boolean AllowStore;
     @ConfigNode("CheckArmor.Command")
     public List<String> CheckArmorCommand;
-    public transient Map<String, List<ItemStack>> bindItems = new HashMap<>();
-
 }

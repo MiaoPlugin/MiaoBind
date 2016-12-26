@@ -3,7 +3,9 @@ package pw.yumc.MiaoBind;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import pw.yumc.MiaoBind.config.Config;
+import pw.yumc.MiaoBind.config.Data;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.listener.ArmorStandListener;
 import pw.yumc.MiaoBind.listener.DeathListener;
@@ -17,6 +19,7 @@ import pw.yumc.YumCore.commands.annotation.Help;
 import pw.yumc.YumCore.commands.interfaces.Executor;
 
 public class MiaoBind extends JavaPlugin implements Executor {
+    private Data data;
     private Config config;
     private CommandMain main;
 
@@ -25,15 +28,11 @@ public class MiaoBind extends JavaPlugin implements Executor {
         return config.getConfig();
     }
 
-    public Config getMiaoBindConfig() {
-        return config;
-    }
-
     @Override
     public void onEnable() {
         main = new CommandMain(new Command(config));
         new CommandSub("MiaoBind", this);
-        new DeathListener(config);
+        new DeathListener(data);
         new ArmorStandListener();
         new PlayerListener(config);
         new InventoryListener(config);
@@ -41,6 +40,7 @@ public class MiaoBind extends JavaPlugin implements Executor {
 
     @Override
     public void onLoad() {
+        data = new Data();
         config = new Config();
         ItemKit.init(config);
     }

@@ -1,11 +1,9 @@
 name: ${project.artifactId}
 description: ${project.description}
 main: ${project.groupId}.${project.artifactId}.${project.artifactId}
-version: ${project.version}-git-${env.GIT_COMMIT}
+version: ${project.version}
 author: 喵♂呜
 website: ${ciManagement.url}
-softdepend:
-- PlaceholderAPI
 commands:
   ${project.artifactId}:
     description: ${project.artifactId} - ${project.description}

@@ -1,7 +1,6 @@
 package pw.yumc.MiaoBind.listener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -16,14 +15,13 @@ import org.bukkit.inventory.ItemStack;
 import pw.yumc.MiaoBind.config.Data;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.UpdateInventory;
-import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
 
 public class DeathListener implements Listener {
-    private Data config;
+    private Data data;
 
-    public DeathListener(Data config) {
-        this.config = config;
+    public DeathListener(Data data) {
+        this.data = data;
         Bukkit.getPluginManager().registerEvents(this, P.instance);
     }
 
@@ -37,8 +35,8 @@ public class DeathListener implements Listener {
             }
         }
         if (!bis.isEmpty()) {
-            config.bindItems.put(e.getEntity().getName(), bis);
-            config.save();
+            data.bindItems.put(e.getEntity().getName(), bis);
+            data.save();
             items.removeAll(bis);
         }
     }
@@ -47,14 +45,7 @@ public class DeathListener implements Listener {
     public void onPlayerRespawnHighest(final PlayerRespawnEvent event) {
         final Player player = event.getPlayer();
         if (!player.hasPermission("MiaoBind.keepondeath")) { return; }
-        List<ItemStack> items = config.bindItems.remove(player.getName());
-        config.save();
-        if (items != null && !items.isEmpty()) {
-            final HashMap<Integer, ItemStack> result = player.getInventory().addItem(items.toArray(new ItemStack[] {}));
-            if (result != null && !result.isEmpty()) {
-                Log.sender(player, "§c由于您的背包已满 部分绑定物品已经由服务器保留 /mbind claim 领取物品!");
-            }
-        }
+        data.recover(player);
         new UpdateInventory(player).runTask(P.instance);
     }
 }

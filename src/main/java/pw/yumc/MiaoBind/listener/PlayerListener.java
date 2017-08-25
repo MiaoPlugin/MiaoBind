@@ -8,9 +8,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.CheckArmor;
@@ -54,23 +59,22 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
-        Log.d("PlayerInteractEvent");
         PlayerInventory inv = event.getPlayer().getInventory();
         ItemStack item = event.getItem();
         if (item == null || item.getType() == Material.AIR) { return; }
         switch (ItemKit.getItemType(item)) {
-        case MiaoTimeBind:
-            if (!ItemKit.isValidItem(item)) {
-                item.setType(Material.AIR);
-            }
-            return;
-        case BIND_ON_USE:
-            ItemKit.bindItem(event.getPlayer(), item);
-            return;
-        case BIND_ON_EQUIP:
-            if (ItemKit.ArmorKit.isEquipable(item)) {
-                new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
-            }
+            case MiaoTimeBind:
+                if (!ItemKit.isValidItem(item)) {
+                    item.setType(Material.AIR);
+                }
+                return;
+            case BIND_ON_USE:
+                ItemKit.bindItem(event.getPlayer(), item);
+                return;
+            case BIND_ON_EQUIP:
+                if (ItemKit.ArmorKit.isEquipable(item)) {
+                    new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
+                }
         }
     }
 
@@ -80,8 +84,10 @@ public class PlayerListener implements Listener {
         if (!player.isValid()) { return; }
         final Item item = event.getItemDrop();
         final ItemStack itemStack = item.getItemStack();
+        Log.d("[PlayerDropItemEvent] 玩家 %s 丢弃物品 %s", player.getName(), itemStack);
         if (config.PreventDrop) {
             if (ItemKit.isBind(itemStack) && ItemKit.isBindedPlayer(player, itemStack)) {
+                Log.d("[PlayerDropItemEvent] 物品 %s 检测到已绑定玩家 %s", itemStack, player.getName());
                 item.setPickupDelay(2 * 20);
                 event.setCancelled(true);
                 new UpdateInventory(player).runTask(P.instance);
@@ -98,20 +104,20 @@ public class PlayerListener implements Listener {
         final Item item = event.getItem();
         final ItemStack itemStack = item.getItemStack();
         switch (ItemKit.getItemType(itemStack)) {
-        case MiaoBind:
-            if (!ItemKit.isBindedPlayer(player, itemStack) && !player.isOp()) {
-                event.setCancelled(true);
-                return;
-            }
-            break;
-        case MiaoTimeBind:
-            if (!ItemKit.isValidItem(itemStack)) {
-                itemStack.setType(Material.AIR);
-            }
-            break;
-        case BIND_ON_PICKUP:
-            ItemKit.bindItem(player, itemStack);
-            break;
+            case MiaoBind:
+                if (!ItemKit.isBindedPlayer(player, itemStack) && !player.isOp()) {
+                    event.setCancelled(true);
+                    return;
+                }
+                break;
+            case MiaoTimeBind:
+                if (!ItemKit.isValidItem(itemStack)) {
+                    itemStack.setType(Material.AIR);
+                }
+                break;
+            case BIND_ON_PICKUP:
+                ItemKit.bindItem(player, itemStack);
+                break;
         }
         if (player.getItemOnCursor() != null && ItemKit.isBind(player.getItemOnCursor())) {
             item.setPickupDelay(40);

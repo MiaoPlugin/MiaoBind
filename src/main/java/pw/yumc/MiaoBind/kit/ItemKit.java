@@ -74,7 +74,9 @@ public class ItemKit {
     public static boolean isBindedPlayer(final Player player, final ItemStack itemStack) {
         final List<String> itemLore = itemStack.getItemMeta().getLore();
         // 最后一个用于兼容Ess的生成物品
-        return itemLore.contains(player.getName()) || itemLore.contains(addColorChar(player.getName())) || itemLore.contains(player.getName().replaceAll("_", " "));
+        return itemLore.contains(player.getName()) || itemLore.contains(addColorChar(player.getName())) || itemLore.contains(player.getName()
+                                                                                                                                   .replaceAll("_",
+                                                                                                                                               " "));
     }
 
     public static boolean isBindOnEquip(final ItemStack itemStack) {
@@ -127,9 +129,9 @@ public class ItemKit {
 
     /**
      * 判断物品是否有效
-     * 
+     *
      * @param itemStack
-     *            物品
+     *         物品
      * @return 是否有效
      */
     public static boolean isValidItem(final ItemStack itemStack) {
@@ -139,13 +141,12 @@ public class ItemKit {
 
     /**
      * 获得物品过期时间戳
-     * 
+     *
      * @param itemStack
-     *            物品
+     *         物品
      * @return 绑定时间 <br>
-     *         -1 错误的格式<br>
-     *         0 非时间绑定
-     * 
+     * -1 错误的格式<br>
+     * 0 非时间绑定
      */
     public static long getBindTime(final ItemStack itemStack) {
         int index = getBindTimeIndex(itemStack);
@@ -285,18 +286,32 @@ public class ItemKit {
     }
 
     public static class ArmorKit {
-        private static List<Material> IronArmor = Arrays.asList(Material.IRON_BOOTS, Material.IRON_CHESTPLATE, Material.IRON_HELMET, Material.IRON_LEGGINGS);
-        private static List<Material> GoldArmor = Arrays.asList(Material.GOLD_BOOTS, Material.GOLD_CHESTPLATE, Material.GOLD_HELMET, Material.GOLD_LEGGINGS);
-        private static List<Material> DiamondArmor = Arrays.asList(Material.DIAMOND_BOOTS, Material.DIAMOND_CHESTPLATE, Material.DIAMOND_HELMET, Material.DIAMOND_LEGGINGS);
-        private static List<Material> LeatherArmor = Arrays.asList(Material.LEATHER_BOOTS, Material.LEATHER_CHESTPLATE, Material.LEATHER_HELMET, Material.LEATHER_LEGGINGS);
-        private static List<Material> ChainmailArmor = Arrays.asList(Material.CHAINMAIL_BOOTS, Material.CHAINMAIL_CHESTPLATE, Material.CHAINMAIL_HELMET, Material.CHAINMAIL_LEGGINGS);
+        private static List<Material> IronArmor = Arrays.asList(Material.IRON_BOOTS,
+                                                                Material.IRON_CHESTPLATE,
+                                                                Material.IRON_HELMET,
+                                                                Material.IRON_LEGGINGS);
+        private static List<Material> GoldArmor = Arrays.asList(Material.GOLD_BOOTS,
+                                                                Material.GOLD_CHESTPLATE,
+                                                                Material.GOLD_HELMET,
+                                                                Material.GOLD_LEGGINGS);
+        private static List<Material> DiamondArmor = Arrays.asList(Material.DIAMOND_BOOTS,
+                                                                   Material.DIAMOND_CHESTPLATE,
+                                                                   Material.DIAMOND_HELMET,
+                                                                   Material.DIAMOND_LEGGINGS);
+        private static List<Material> LeatherArmor = Arrays.asList(Material.LEATHER_BOOTS,
+                                                                   Material.LEATHER_CHESTPLATE,
+                                                                   Material.LEATHER_HELMET,
+                                                                   Material.LEATHER_LEGGINGS);
+        private static List<Material> ChainmailArmor = Arrays.asList(Material.CHAINMAIL_BOOTS,
+                                                                     Material.CHAINMAIL_CHESTPLATE,
+                                                                     Material.CHAINMAIL_HELMET,
+                                                                     Material.CHAINMAIL_LEGGINGS);
 
         /**
          * Checks to see if an item is a chainmail armor piece.
          *
          * @param is
-         *            Item to check
-         *
+         *         Item to check
          * @return true if the item is chainmail armor, false otherwise
          */
         public static boolean isChainmailArmor(final ItemStack is) {
@@ -307,8 +322,7 @@ public class ItemKit {
          * Checks to see if an item is a diamond armor piece.
          *
          * @param is
-         *            Item to check
-         *
+         *         Item to check
          * @return true if the item is diamond armor, false otherwise
          */
         public static boolean isDiamondArmor(final ItemStack is) {
@@ -319,8 +333,7 @@ public class ItemKit {
          * Checks to see if an item is a gold armor piece.
          *
          * @param is
-         *            Item to check
-         *
+         *         Item to check
          * @return true if the item is gold armor, false otherwise
          */
         public static boolean isGoldArmor(final ItemStack is) {
@@ -331,8 +344,7 @@ public class ItemKit {
          * Checks to see if an item is an iron armor piece.
          *
          * @param is
-         *            Item to check
-         *
+         *         Item to check
          * @return true if the item is iron armor, false otherwise
          */
         public static boolean isIronArmor(final ItemStack is) {
@@ -343,8 +355,7 @@ public class ItemKit {
          * Checks to see if an item is a leather armor piece.
          *
          * @param is
-         *            Item to check
-         *
+         *         Item to check
          * @return true if the item is leather armor, false otherwise
          */
         public static boolean isLeatherArmor(final ItemStack is) {
@@ -355,8 +366,7 @@ public class ItemKit {
          * Checks to see if an item is a wearable armor piece.
          *
          * @param is
-         *            Item to check
-         *
+         *         Item to check
          * @return true if the item is armor, false otherwise
          */
         public static boolean isMinecraftArmor(final ItemStack is) {
@@ -367,8 +377,7 @@ public class ItemKit {
          * Checks to see if an item is an equipable item.
          *
          * @param is
-         *            Item to check
-         *
+         *         Item to check
          * @return true if the item is equipable, false otherwise
          */
         public static boolean isEquipable(final ItemStack is) {

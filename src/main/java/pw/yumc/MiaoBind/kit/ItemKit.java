@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -72,11 +73,13 @@ public class ItemKit {
     }
 
     public static boolean isBindedPlayer(final Player player, final ItemStack itemStack) {
-        final List<String> itemLore = itemStack.getItemMeta().getLore();
+        final List<String> itemLore = Optional.ofNullable(itemStack).map(ItemStack::getItemMeta).map(ItemMeta::getLore).orElse(null);
+        if (itemLore == null) {
+            return false;
+        }
+        boolean base = itemLore.contains(player.getName()) || itemLore.contains(addColorChar(player.getName()));
         // 最后一个用于兼容Ess的生成物品
-        return itemLore.contains(player.getName()) || itemLore.contains(addColorChar(player.getName())) || itemLore.contains(player.getName()
-                                                                                                                                   .replaceAll("_",
-                                                                                                                                               " "));
+        return base || itemLore.contains(player.getName().replaceAll("_", " "));
     }
 
     public static boolean isBindOnEquip(final ItemStack itemStack) {

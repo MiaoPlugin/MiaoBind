@@ -1,5 +1,7 @@
 package pw.yumc.MiaoBind.listener;
 
+import java.util.Optional;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -82,9 +84,10 @@ public class InventoryListener implements Listener {
     public void onInventoryDrop(final InventoryClickEvent event) {
         HumanEntity entity = event.getWhoClicked();
         InventoryAction action = event.getAction();
-        if (entity instanceof Player) {
+        ItemStack itemStack = Optional.ofNullable(event.getCurrentItem()).orElse(event.getCursor());
+        if (itemStack != null && entity instanceof Player) {
             final Player player = (Player) entity;
-            if (action.name().startsWith("DROP") && ItemKit.isBindedPlayer(player, event.getCurrentItem())) {
+            if (action.name().startsWith("DROP") && ItemKit.isBindedPlayer(player, itemStack)) {
                 event.setResult(Event.Result.DENY);
                 event.setCancelled(true);
             }

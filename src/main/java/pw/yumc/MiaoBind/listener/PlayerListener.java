@@ -67,14 +67,16 @@ public class PlayerListener implements Listener {
                 if (!ItemKit.isValidItem(item)) {
                     item.setType(Material.AIR);
                 }
-                return;
+                break;
             case BIND_ON_USE:
                 ItemKit.bindItem(event.getPlayer(), item);
-                return;
+                break;
             case BIND_ON_EQUIP:
                 if (ItemKit.ArmorKit.isEquipable(item)) {
                     new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
                 }
+                break;
+            default:
         }
     }
 
@@ -93,6 +95,7 @@ public class PlayerListener implements Listener {
                 new UpdateInventory(player).runTask(P.instance);
             }
         } else if (config.DeleteOnDrop) {
+            Log.d("[PlayerDropItemEvent] 玩家 %s 丢弃物品且物品被直接销毁!", player.getName());
             player.playSound(player.getLocation(), sound, 1.0F, 1.0F);
             event.getItemDrop().remove();
         }
@@ -118,6 +121,7 @@ public class PlayerListener implements Listener {
             case BIND_ON_PICKUP:
                 ItemKit.bindItem(player, itemStack);
                 break;
+            default:
         }
         if (player.getItemOnCursor() != null && ItemKit.isBind(player.getItemOnCursor())) {
             item.setPickupDelay(40);

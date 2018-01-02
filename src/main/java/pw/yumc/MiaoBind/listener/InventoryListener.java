@@ -40,9 +40,20 @@ public class InventoryListener implements Listener {
         final Player player = (Player) entity;
         final ItemStack itemStack = event.getCurrentItem();
         if (ItemKit.getItemType(itemStack) != ItemKit.ItemType.MiaoBind) { return; }
+        if (player.getInventory().firstEmpty() == -1) {
+            Log.d("[InventoryListener onInventoryClickEvent] notFirstEmpty");
+            Log.sender(player, "§c背包已满的情况下禁止点击绑定物品 防止物品意外丢失!");
+            event.setResult(Event.Result.DENY);
+            event.setCancelled(true);
+            return;
+        }
         final InventoryType inventoryType = event.getInventory().getType();
-        boolean isCraftInv = !config.AllowStore && inventoryType != InventoryType.CRAFTING && inventoryType != InventoryType.ANVIL;
-        if (isCraftInv || (!ItemKit.isBindedPlayer(player, itemStack) && !player.isOp())) {
+        boolean notAllowStore = !config.AllowStore;
+        boolean isCraftInv = inventoryType == InventoryType.CRAFTING || inventoryType == InventoryType.ANVIL;
+        boolean canStore = !ItemKit.isBindedPlayer(player, itemStack) || player.isOp();
+        Log.d("[InventoryListener onInventoryClickEvent] notAllowStore: %s isCraftInv: %s canStore: %s", notAllowStore, isCraftInv, canStore);
+        if (notAllowStore && !isCraftInv && !canStore) {
+            event.setResult(Event.Result.DENY);
             event.setCancelled(true);
         }
     }

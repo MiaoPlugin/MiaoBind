@@ -26,7 +26,7 @@ import pw.yumc.YumCore.commands.interfaces.Executor;
  */
 public class Command implements Executor {
     private Config Config;
-    boolean newVersion = true;
+    private boolean newVersion = true;
     {
         try {
             PlayerInventory.class.getMethod("getItemInMainHand");
@@ -39,7 +39,7 @@ public class Command implements Executor {
         Config = config;
     }
 
-    public ItemStack getItemInHand(Player player) {
+    private ItemStack getItemInHand(Player player) {
         if (newVersion) {
             return player.getInventory().getItemInMainHand();
         } else {

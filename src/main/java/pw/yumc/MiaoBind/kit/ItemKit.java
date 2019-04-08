@@ -157,7 +157,7 @@ public class ItemKit {
             Log.d("判断为时间绑定物品!");
             String time = itemStack.getItemMeta().getLore().get(index);
             if (time.contains(TimeTag)) {
-                String date = time.split(TimeTag, 1)[1];
+                String date = time.split(TimeTag, 2)[1];
                 try {
                     return Config.DateFormat.parse(date).getTime();
                 } catch (ParseException e) {
@@ -228,11 +228,10 @@ public class ItemKit {
         return s.toString();
     }
 
-    public static List<String> removeTag(List<String> lores) {
+    public static void removeTag(List<String> lores) {
         lores.removeAll(Tag.BindOnUse);
         lores.removeAll(Tag.BindOnEquip);
         lores.removeAll(Tag.BindOnPickup);
-        return lores;
     }
 
     public static ItemStack unbindItem(final ItemStack itemStack) {
@@ -240,8 +239,7 @@ public class ItemKit {
         Log.d("解绑物品 %s", itemStack);
         final ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta.hasLore() && isBind(itemStack)) {
-            List<String> itemLore = new ArrayList<>();
-            itemLore.addAll(itemMeta.getLore());
+            List<String> itemLore = new ArrayList<>(itemMeta.getLore());
             final int index = getIndexOfBindTag(itemLore);
             if (index == -1) { return itemStack; }
             itemLore.remove(index);

@@ -126,6 +126,7 @@ public class InventoryListener implements Listener {
                     if (itemType == ItemKit.ItemType.BIND_ON_PICKUP) {
                         ItemKit.bindItem(player, itemStack);
                     }
+                default:
             }
             if (ItemKit.ArmorKit.isEquipable(itemStack) && event.isShiftClick()) {
                 new CheckArmor(player).runTaskLater(P.instance, 2);

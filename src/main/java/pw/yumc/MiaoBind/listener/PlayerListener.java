@@ -23,6 +23,9 @@ import pw.yumc.MiaoBind.runnable.UpdateInventory;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
 
+/**
+ * @author MiaoWoo
+ */
 public class PlayerListener implements Listener {
     private Config config;
     private Sound sound;
@@ -59,7 +62,6 @@ public class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
-        PlayerInventory inv = event.getPlayer().getInventory();
         ItemStack item = event.getItem();
         if (item == null || item.getType() == Material.AIR) { return; }
         switch (ItemKit.getItemType(item)) {

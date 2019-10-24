@@ -12,6 +12,9 @@ import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
 
+/**
+ * @author MiaoWoo
+ */
 public class ArmorStandListener implements Listener {
     public ArmorStandListener() {
         Bukkit.getPluginManager().registerEvents(this, P.instance);

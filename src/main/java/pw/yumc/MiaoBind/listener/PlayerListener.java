@@ -51,11 +51,11 @@ public class PlayerListener implements Listener {
     public void onPlayerHeldItem(PlayerItemHeldEvent event) {
         PlayerInventory inv = event.getPlayer().getInventory();
         ItemStack pre = inv.getItem(event.getPreviousSlot());
-        if (!ItemKit.isValidItem(pre)) {
+        if (ItemKit.isInvalidItem(pre)) {
             inv.setItem(event.getPreviousSlot(), null);
         }
         ItemStack newi = inv.getItem(event.getNewSlot());
-        if (!ItemKit.isValidItem(newi)) {
+        if (ItemKit.isInvalidItem(newi)) {
             inv.setItem(event.getNewSlot(), null);
         }
     }
@@ -66,7 +66,7 @@ public class PlayerListener implements Listener {
         if (item == null || item.getType() == Material.AIR) { return; }
         switch (ItemKit.getItemType(item)) {
             case MiaoTimeBind:
-                if (!ItemKit.isValidItem(item)) {
+                if (ItemKit.isInvalidItem(item)) {
                     item.setType(Material.AIR);
                 }
                 break;
@@ -90,7 +90,7 @@ public class PlayerListener implements Listener {
         final ItemStack itemStack = item.getItemStack();
         Log.d("[PlayerDropItemEvent] 玩家 %s 丢弃物品 %s", player.getName(), itemStack);
         if (config.PreventDrop) {
-            if (ItemKit.isBind(itemStack) && ItemKit.isBindedPlayer(player, itemStack)) {
+            if (ItemKit.isBind(itemStack) && ItemKit.isBoundPlayer(player, itemStack)) {
                 Log.d("[PlayerDropItemEvent] 物品 %s 检测到已绑定玩家 %s", itemStack, player.getName());
                 item.setPickupDelay(2 * 20);
                 event.setCancelled(true);
@@ -110,13 +110,13 @@ public class PlayerListener implements Listener {
         final ItemStack itemStack = item.getItemStack();
         switch (ItemKit.getItemType(itemStack)) {
             case MiaoBind:
-                if (!ItemKit.isBindedPlayer(player, itemStack) && !player.isOp()) {
+                if (!ItemKit.isBoundPlayer(player, itemStack) && !player.isOp()) {
                     event.setCancelled(true);
                     return;
                 }
                 break;
             case MiaoTimeBind:
-                if (!ItemKit.isValidItem(itemStack)) {
+                if (ItemKit.isInvalidItem(itemStack)) {
                     itemStack.setType(Material.AIR);
                 }
                 break;

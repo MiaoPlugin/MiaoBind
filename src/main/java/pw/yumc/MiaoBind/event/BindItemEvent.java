@@ -6,6 +6,9 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * @author MiaoWoo
+ */
 public class BindItemEvent extends PlayerEvent implements Cancellable {
     private ItemStack itemStack;
     private boolean cancelled;

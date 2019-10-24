@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.YumCore.bukkit.Log;
 
@@ -23,7 +24,7 @@ public class CheckTimeBind extends BukkitRunnable {
         Log.d("检查时间绑定物品!");
         if (player != null && player.isValid()) {
             for (ItemStack item : player.getInventory().getContents()) {
-                if (!ItemKit.isValidItem(item)) {
+                if (ItemKit.isInvalidItem(item)) {
                     item.setType(Material.AIR);
                 }
             }

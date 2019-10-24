@@ -7,6 +7,9 @@ import pw.yumc.YumCore.config.annotation.ConfigNode;
 import pw.yumc.YumCore.config.annotation.ReadOnly;
 import pw.yumc.YumCore.config.inject.InjectConfig;
 
+/**
+ * @author MiaoWoo
+ */
 public class Config extends InjectConfig {
     @ConfigNode("Style.HideName")
     public Boolean HideName;

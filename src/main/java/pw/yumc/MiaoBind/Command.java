@@ -16,17 +16,19 @@ import pw.yumc.YumCore.commands.annotation.Cmd;
 import pw.yumc.YumCore.commands.annotation.Help;
 import pw.yumc.YumCore.commands.annotation.Option;
 import pw.yumc.YumCore.commands.annotation.Sort;
+import pw.yumc.YumCore.commands.exception.CommandException;
 import pw.yumc.YumCore.commands.interfaces.Executor;
 
 /**
  * 命令类
- * 
- * @since 2016/11/18 0018
+ *
  * @author 喵♂呜
+ * @since 2016/11/18 0018
  */
 public class Command implements Executor {
     private Config Config;
     private boolean newVersion = true;
+
     {
         try {
             PlayerInventory.class.getMethod("getItemInMainHand");
@@ -50,20 +52,18 @@ public class Command implements Executor {
     @Sort(1)
     @Cmd(executor = Cmd.Executor.PLAYER, permission = "MiaoBind.bind")
     @Help("绑定物品")
-    public void bind(Player player, @Option("check") Player target) {
+    public void bind(Player player, @Option("check sender") Player target) {
         ItemStack is = check(player);
-        if (is == null) { return; }
         ItemKit.bindItem(target == null ? player : target, is);
         Log.sender(player, "§a物品绑定成功!");
     }
 
     @Sort(2)
     @Cmd(minimumArguments = 2, executor = Cmd.Executor.PLAYER, permission = "MiaoBind.bindtime")
-    @Help("绑定时限物品")
+    @Help(value = "绑定时限物品", possibleArguments = "<玩家名称> 到期时间[xxxx-xx-xx xx:xx:xx]")
     public void bindtime(Player player, String name, String time) {
         Player target = player;
         ItemStack is = check(player);
-        if (is == null) { return; }
         if (time == null) {
             time = name;
         } else {
@@ -99,7 +99,6 @@ public class Command implements Executor {
     @Help("拾取时绑定物品")
     public void bindonpickup(Player player) {
         ItemStack is = check(player);
-        if (is == null) { return; }
         ItemKit.bopItem(is);
         Log.sender(player, "§a物品已设定为 §c拾取时绑定物品!");
     }
@@ -108,7 +107,7 @@ public class Command implements Executor {
     @Help("装备时绑定物品")
     public void bindonequip(Player player) {
         ItemStack is = check(player);
-        if (is == null) { return; }
+        ItemKit.ArmorKit.isEquipable(is);
         ItemKit.boeItem(is);
         Log.sender(player, "§a物品已设定为 §c装备时绑定物品!");
     }
@@ -117,7 +116,6 @@ public class Command implements Executor {
     @Help("使用时绑定物品")
     public void bindonuse(Player player) {
         ItemStack is = check(player);
-        if (is == null) { return; }
         ItemKit.bouItem(is);
         Log.sender(player, "§a物品已设定为 §c使用时绑定物品!");
     }
@@ -125,12 +123,10 @@ public class Command implements Executor {
     private ItemStack check(Player player) {
         ItemStack is = getItemInHand(player);
         if (is == null || is.getType() == Material.AIR) {
-            Log.sender(player, "§c空手无法进行操作!");
-            return null;
+            throw new CommandException("§c空手无法进行操作!");
         }
         if (ItemKit.isBind(is)) {
-            Log.sender(player, "§c物品已绑定 请勿重复操作!");
-            return null;
+            throw new CommandException("§c物品已绑定 请勿重复操作!");
         }
         return is;
     }

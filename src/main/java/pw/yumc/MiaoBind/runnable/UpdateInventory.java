@@ -3,6 +3,9 @@ package pw.yumc.MiaoBind.runnable;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * @author MiaoWoo
+ */
 public class UpdateInventory extends BukkitRunnable {
     private final Player player;
 

@@ -1,10 +1,14 @@
 package pw.yumc.MiaoBind.config;
 
-import org.bukkit.configuration.ConfigurationSection;
-import pw.yumc.YumCore.config.inject.InjectConfigurationSection;
-
 import java.util.List;
 
+import org.bukkit.configuration.ConfigurationSection;
+
+import pw.yumc.YumCore.config.inject.InjectConfigurationSection;
+
+/**
+ * @author MiaoWoo
+ */
 public class Tag extends InjectConfigurationSection {
     public List<String> Bind;
     public List<String> TimeBind;

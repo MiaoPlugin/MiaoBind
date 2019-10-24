@@ -72,7 +72,7 @@ public class ItemKit {
         return ItemType.NORMAL;
     }
 
-    public static boolean isBindedPlayer(final Player player, final ItemStack itemStack) {
+    public static boolean isBoundPlayer(final Player player, final ItemStack itemStack) {
         final List<String> itemLore = Optional.ofNullable(itemStack).map(ItemStack::getItemMeta).map(ItemMeta::getLore).orElse(null);
         if (itemLore == null) {
             return false;
@@ -137,9 +137,9 @@ public class ItemKit {
      *         物品
      * @return 是否有效
      */
-    public static boolean isValidItem(final ItemStack itemStack) {
+    public static boolean isInvalidItem(final ItemStack itemStack) {
         long time = getBindTime(itemStack);
-        return time == 0 || time > System.currentTimeMillis();
+        return time != 0 && time <= System.currentTimeMillis();
     }
 
     /**
@@ -278,6 +278,9 @@ public class ItemKit {
     }
 
     public enum ItemType {
+        /**
+         * 普通物品
+         */
         NORMAL,
         MiaoBind,
         MiaoTimeBind,
@@ -382,7 +385,8 @@ public class ItemKit {
          * @return true if the item is equipable, false otherwise
          */
         public static boolean isEquipable(final ItemStack is) {
-            return !(is == null || is.getType() == Material.AIR) && (isMinecraftArmor(is) || is.getType() == Material.SKULL_ITEM || is.getType() == Material.JACK_O_LANTERN);
+            return !(is == null || is.getType() == Material.AIR) &&
+                   (isMinecraftArmor(is) || is.getType() == Material.SKULL_ITEM || is.getType() == Material.JACK_O_LANTERN);
         }
     }
 }

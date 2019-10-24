@@ -12,6 +12,7 @@ import pw.yumc.MiaoBind.listener.ArmorStandListener;
 import pw.yumc.MiaoBind.listener.DeathListener;
 import pw.yumc.MiaoBind.listener.InventoryListener;
 import pw.yumc.MiaoBind.listener.PlayerListener;
+import pw.yumc.MiaoBind.listener.SwapHandItemListener;
 import pw.yumc.MiaoBind.runnable.UpdateInventory;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
@@ -20,6 +21,8 @@ import pw.yumc.YumCore.commands.CommandSub;
 import pw.yumc.YumCore.commands.annotation.Cmd;
 import pw.yumc.YumCore.commands.annotation.Help;
 import pw.yumc.YumCore.commands.interfaces.Executor;
+import pw.yumc.YumCore.statistic.Statistics;
+import pw.yumc.YumCore.update.SubscribeTask;
 
 public class MiaoBind extends JavaPlugin implements Executor {
     private Data data;
@@ -39,6 +42,13 @@ public class MiaoBind extends JavaPlugin implements Executor {
         new ArmorStandListener();
         new PlayerListener(config);
         new InventoryListener(config);
+        try {
+            Class.forName("org.bukkit.event.player.PlayerSwapHandItemsEvent");
+            new SwapHandItemListener();
+        } catch (Exception ignored) {
+        }
+        new Statistics();
+        new SubscribeTask(true, SubscribeTask.UpdateType.MAVEN);
     }
 
     @Override
@@ -51,7 +61,7 @@ public class MiaoBind extends JavaPlugin implements Executor {
     @Cmd(permission = "MiaoBind.admin", aliases = "?")
     @Help("查看全局帮助")
     public void allhelp(final CommandSender sender) {
-        main.onCommand(sender, null, "miaobind", new String[] { "?" });
+        main.onCommand(sender, null, "miaobind", new String[]{"?"});
     }
 
     @Cmd(permission = "MiaoBind.reload")

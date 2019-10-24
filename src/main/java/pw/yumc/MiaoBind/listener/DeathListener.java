@@ -17,6 +17,9 @@ import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.UpdateInventory;
 import pw.yumc.YumCore.bukkit.P;
 
+/**
+ * @author MiaoWoo
+ */
 public class DeathListener implements Listener {
     private Data data;
 

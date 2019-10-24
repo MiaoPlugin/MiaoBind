@@ -18,6 +18,7 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
@@ -50,7 +51,7 @@ public class InventoryListener implements Listener {
         final InventoryType inventoryType = event.getInventory().getType();
         boolean notAllowStore = !config.AllowStore;
         boolean isCraftInv = inventoryType == InventoryType.CRAFTING || inventoryType == InventoryType.ANVIL;
-        boolean canStore = !ItemKit.isBindedPlayer(player, itemStack) || player.isOp();
+        boolean canStore = !ItemKit.isBoundPlayer(player, itemStack) || player.isOp();
         Log.d("[InventoryListener onInventoryClickEvent] notAllowStore: %s isCraftInv: %s canStore: %s", notAllowStore, isCraftInv, canStore);
         if (notAllowStore && !isCraftInv && !canStore) {
             event.setResult(Event.Result.DENY);
@@ -98,7 +99,7 @@ public class InventoryListener implements Listener {
         ItemStack itemStack = Optional.ofNullable(event.getCurrentItem()).orElse(event.getCursor());
         if (itemStack != null && entity instanceof Player) {
             final Player player = (Player) entity;
-            if (action.name().startsWith("DROP") && ItemKit.isBindedPlayer(player, itemStack)) {
+            if (action.name().startsWith("DROP") && ItemKit.isBoundPlayer(player, itemStack)) {
                 event.setResult(Event.Result.DENY);
                 event.setCancelled(true);
             }
@@ -111,7 +112,9 @@ public class InventoryListener implements Listener {
         ItemStack itemStack = event.getCursor();
         SlotType slotType = event.getSlotType();
         InventoryAction action = event.getAction();
-        Log.d("InventoryClickEvent Action: %s Click: %s SlotType: %s", action.name(), event.getClick().name(), slotType.name());
+        Log.d("InventoryClickEvent Action: %s Click: %s SlotType: %s Slot: %s RawSlot: %s",
+              action.name(), event.getClick().name(), slotType.name(),
+              event.getSlot(), event.getRawSlot());
         if (itemStack == null || itemStack.getType() == Material.AIR) {
             itemStack = event.getCurrentItem();
         }
@@ -128,7 +131,9 @@ public class InventoryListener implements Listener {
                     }
                 default:
             }
-            if (ItemKit.ArmorKit.isEquipable(itemStack) && event.isShiftClick()) {
+            boolean isArmor = ItemKit.ArmorKit.isEquipable(itemStack) && event.isShiftClick();
+            boolean isExtra = event.getClickedInventory() instanceof PlayerInventory && event.getRawSlot() > 44;
+            if (isArmor || isExtra) {
                 new CheckArmor(player).runTaskLater(P.instance, 2);
             }
         }

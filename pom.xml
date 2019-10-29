@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>MiaoBind</artifactId>
-    <version>1.2.2</version>
+    <version>1.2.3</version>
 
     <parent>
         <groupId>pw.yumc</groupId>
@@ -22,6 +22,14 @@
     </build>
 
     <properties>
+        <update.description>§a正式版本 §bv1.2.3</update.description>
+        <update.changes>
+            §619-10-30§a fix: 修复时间绑定物品可以被他人拾取的BUG;
+            §619-10-29§a fix: 修复部分命令报错的问题;
+            §619-10-28§a fix: 修复其他玩家可以从箱子获取非自己绑定的BUG;
+        </update.changes>
+        <update.changelog>
+        </update.changelog>
         <env.GIT_COMMIT>DEV</env.GIT_COMMIT>
     </properties>
 

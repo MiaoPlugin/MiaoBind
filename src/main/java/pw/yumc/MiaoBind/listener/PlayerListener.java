@@ -110,12 +110,12 @@ public class PlayerListener implements Listener {
         final ItemStack itemStack = item.getItemStack();
         switch (ItemKit.getItemType(itemStack)) {
             case MiaoBind:
+            case MiaoTimeBind:
                 if (!ItemKit.isBoundPlayer(player, itemStack) && !player.isOp()) {
                     event.setCancelled(true);
+                    item.setPickupDelay(200);
                     return;
                 }
-                break;
-            case MiaoTimeBind:
                 if (ItemKit.isInvalidItem(itemStack)) {
                     itemStack.setType(Material.AIR);
                 }

@@ -26,6 +26,9 @@ import pw.yumc.MiaoBind.runnable.CheckArmor;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
 
+/**
+ * @author MiaoWoo
+ */
 public class InventoryListener implements Listener {
     private Config config;
 
@@ -40,7 +43,8 @@ public class InventoryListener implements Listener {
         if (!(entity instanceof Player)) { return; }
         final Player player = (Player) entity;
         final ItemStack itemStack = event.getCurrentItem();
-        if (ItemKit.getItemType(itemStack) != ItemKit.ItemType.MiaoBind) { return; }
+        ItemKit.ItemType itemType = ItemKit.getItemType(itemStack);
+        if (itemType != ItemKit.ItemType.MiaoBind && itemType != ItemKit.ItemType.MiaoTimeBind) { return; }
         if (player.getInventory().firstEmpty() == -1) {
             Log.d("[InventoryListener onInventoryClickEvent] notFirstEmpty");
             Log.sender(player, "§c背包已满的情况下禁止点击绑定物品 防止物品意外丢失!");
@@ -48,12 +52,15 @@ public class InventoryListener implements Listener {
             event.setCancelled(true);
             return;
         }
+        if (player.isOp()) { return; }
+        if (!ItemKit.isBoundPlayer(player, itemStack)) {
+            Log.sender(player, "§c当前物品已被绑定 非持有者无法获取!");
+            event.setResult(Event.Result.DENY);
+            event.setCancelled(true);
+        }
         final InventoryType inventoryType = event.getInventory().getType();
-        boolean notAllowStore = !config.AllowStore;
         boolean isCraftInv = inventoryType == InventoryType.CRAFTING || inventoryType == InventoryType.ANVIL;
-        boolean canStore = !ItemKit.isBoundPlayer(player, itemStack) || player.isOp();
-        Log.d("[InventoryListener onInventoryClickEvent] notAllowStore: %s isCraftInv: %s canStore: %s", notAllowStore, isCraftInv, canStore);
-        if (notAllowStore && !isCraftInv && !canStore) {
+        if (!config.AllowStore && !isCraftInv) {
             event.setResult(Event.Result.DENY);
             event.setCancelled(true);
         }

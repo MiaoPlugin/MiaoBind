@@ -68,6 +68,7 @@ public class MiaoBind extends JavaPlugin implements Executor {
     @Help("重载配置文件")
     public void reload(final CommandSender sender) {
         config.reload();
+        ItemKit.init(config);
         Log.sender(sender, "§a配置文件已重载!");
     }
 

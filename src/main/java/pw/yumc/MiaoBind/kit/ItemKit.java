@@ -112,6 +112,7 @@ public class ItemKit {
     }
 
     public static boolean isBindOnTag(final ItemStack itemStack, List<String> tags) {
+        Log.d("判断物品: %s 判断标签: %s", itemStack, tags);
         try {
             List<String> lores = itemStack.getItemMeta().getLore();
             for (String tag : tags) {

@@ -27,11 +27,10 @@ import pw.yumc.YumCore.bukkit.P;
  * @author MiaoWoo
  */
 public class PlayerListener implements Listener {
-    private Config config;
+    private Config config = P.getInjectConfig();
     private Sound sound;
 
-    public PlayerListener(Config config) {
-        this.config = config;
+    public PlayerListener() {
         try {
             sound = Sound.valueOf("ITEM_SHIELD_BREAK");
         } catch (IllegalArgumentException e) {

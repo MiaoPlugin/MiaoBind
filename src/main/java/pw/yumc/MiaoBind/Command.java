@@ -55,7 +55,6 @@ public class Command implements Executor {
     public void bind(Player player, @Option("check sender") Player target) {
         ItemStack is = check(player);
         ItemKit.bindItem(target == null ? player : target, is);
-        Log.sender(player, "§a物品绑定成功!");
     }
 
     @Sort(2)

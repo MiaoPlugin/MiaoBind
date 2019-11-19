@@ -6,11 +6,15 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
 
+import pw.yumc.YumCore.annotation.NotProguard;
+
 /**
  * @author MiaoWoo
  */
+@NotProguard
 public class BindItemEvent extends PlayerEvent implements Cancellable {
     private ItemStack itemStack;
+    private String cancelReason = "未知";
     private boolean cancelled;
 
     public BindItemEvent(Player player, ItemStack itemStack) {
@@ -25,6 +29,14 @@ public class BindItemEvent extends PlayerEvent implements Cancellable {
 
     public void setItemStack(ItemStack itemStack) {
         this.itemStack = itemStack;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
     }
 
     @Override

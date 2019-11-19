@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>MiaoBind</artifactId>
-    <version>1.2.3</version>
+    <version>1.2.5</version>
 
     <parent>
         <groupId>pw.yumc</groupId>
@@ -22,13 +22,16 @@
     </build>
 
     <properties>
-        <update.description>§a正式版本 §bv1.2.3</update.description>
+        <update.description>§a正式版本 §bv1.2.5</update.description>
         <update.changes>
-            §619-10-30§a fix: 修复时间绑定物品可以被他人拾取的BUG;
-            §619-10-29§a fix: 修复部分命令报错的问题;
-            §619-10-28§a fix: 修复其他玩家可以从箱子获取非自己绑定的BUG;
+            §619-11-19§a feat: 新增 AllowStack 配置 限制多个物品绑定;
+            §619-11-18§a feat: 新增 BindItemEvent 事件 方便其他插件操作;
+            §619-11-17§c fix: 修复reload命令 未更新绑定标签的BUG
         </update.changes>
         <update.changelog>
+            §619-10-30§c fix: 修复时间绑定物品可以被他人拾取的BUG;
+            §619-10-29§c fix: 修复部分命令报错的问题;
+            §619-10-28§c fix: 修复其他玩家可以从箱子获取非自己绑定的BUG;
         </update.changelog>
         <env.GIT_COMMIT>DEV</env.GIT_COMMIT>
     </properties>

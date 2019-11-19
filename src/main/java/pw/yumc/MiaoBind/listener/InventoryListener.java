@@ -30,10 +30,9 @@ import pw.yumc.YumCore.bukkit.P;
  * @author MiaoWoo
  */
 public class InventoryListener implements Listener {
-    private Config config;
+    private Config config = P.getInjectConfig();
 
-    public InventoryListener(Config config) {
-        this.config = config;
+    public InventoryListener() {
         Bukkit.getPluginManager().registerEvents(this, P.instance);
     }
 

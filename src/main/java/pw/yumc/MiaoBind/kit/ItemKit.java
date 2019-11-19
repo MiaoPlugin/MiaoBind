@@ -13,36 +13,33 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import pw.yumc.MiaoBind.config.Config;
-import pw.yumc.MiaoBind.config.Tag;
 import pw.yumc.MiaoBind.event.BindItemEvent;
 import pw.yumc.YumCore.bukkit.Log;
 
 public class ItemKit {
     private static String TimeTag = "§卐 ";
     private static Config Config;
-    private static Tag Tag;
 
     public static void init(Config config) {
         ItemKit.Config = config;
-        ItemKit.Tag = config.Tag;
     }
 
     public static ItemStack boeItem(final ItemStack itemStack) {
         if (itemStack == null) { return null; }
         if (isBindOnEquip(itemStack)) { return itemStack; }
-        return addTag(itemStack, Tag.BindOnEquip.get(0));
+        return addTag(itemStack, Config.Tag.BindOnEquip.get(0));
     }
 
     public static ItemStack bopItem(final ItemStack itemStack) {
         if (itemStack == null) { return null; }
         if (isBindOnPickup(itemStack)) { return itemStack; }
-        return addTag(itemStack, Tag.BindOnPickup.get(0));
+        return addTag(itemStack, Config.Tag.BindOnPickup.get(0));
     }
 
     public static ItemStack bouItem(final ItemStack itemStack) {
         if (itemStack == null) { return null; }
         if (isBindOnUse(itemStack)) { return itemStack; }
-        return addTag(itemStack, Tag.BindOnUse.get(0));
+        return addTag(itemStack, Config.Tag.BindOnUse.get(0));
     }
 
     public static ItemType getItemType(final ItemStack itemStack) {
@@ -83,15 +80,15 @@ public class ItemKit {
     }
 
     public static boolean isBindOnEquip(final ItemStack itemStack) {
-        return isBindOnTag(itemStack, Tag.BindOnEquip);
+        return isBindOnTag(itemStack, Config.Tag.BindOnEquip);
     }
 
     public static boolean isBindOnPickup(final ItemStack itemStack) {
-        return isBindOnTag(itemStack, Tag.BindOnPickup);
+        return isBindOnTag(itemStack, Config.Tag.BindOnPickup);
     }
 
     public static boolean isBindOnUse(final ItemStack itemStack) {
-        return isBindOnTag(itemStack, Tag.BindOnUse);
+        return isBindOnTag(itemStack, Config.Tag.BindOnUse);
     }
 
     public static boolean isBindOnTime(final ItemStack itemStack) {
@@ -101,7 +98,7 @@ public class ItemKit {
     public static int getBindTimeIndex(final ItemStack itemStack) {
         try {
             List<String> lores = itemStack.getItemMeta().getLore();
-            for (String tag : Tag.TimeBind) {
+            for (String tag : Config.Tag.TimeBind) {
                 for (String lore : lores) {
                     if (lore.startsWith(tag)) { return lores.indexOf(lore); }
                 }
@@ -128,7 +125,7 @@ public class ItemKit {
     }
 
     public static boolean isBind(final ItemStack itemStack) {
-        return isBindOnTag(itemStack, Tag.Bind) || isBindOnTime(itemStack);
+        return isBindOnTag(itemStack, Config.Tag.Bind) || isBindOnTime(itemStack);
     }
 
     /**
@@ -175,8 +172,11 @@ public class ItemKit {
         Log.d("玩家 %s 绑定物品 %s", player, itemStack);
         final BindItemEvent bindItemEvent = new BindItemEvent(player, itemStack);
         Bukkit.getPluginManager().callEvent(bindItemEvent);
+        if (bindItemEvent.isCancelled()) {
+            Log.sender(player, bindItemEvent.getCancelReason());
+            return itemStack;
+        }
         itemStack = bindItemEvent.getItemStack();
-        if (bindItemEvent.isCancelled()) { return itemStack; }
         List<String> lores = new ArrayList<>();
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) {
@@ -188,10 +188,11 @@ public class ItemKit {
         if (!lores.isEmpty()) {
             removeTag(lores);
         }
-        lores.add(Tag.Bind.get(0));
+        lores.add(Config.Tag.Bind.get(0));
         lores.add(Config.HideName ? addColorChar(player.getName()) : player.getName());
         itemMeta.setLore(lores);
         itemStack.setItemMeta(itemMeta);
+        Log.sender(player, "§a物品绑定成功!");
         return itemStack;
     }
 
@@ -214,7 +215,7 @@ public class ItemKit {
         if (!lores.isEmpty()) {
             removeTag(lores);
         }
-        lores.add(Tag.TimeBind.get(0) + TimeTag + time);
+        lores.add(Config.Tag.TimeBind.get(0) + TimeTag + time);
         lores.add(Config.HideName ? addColorChar(player.getName()) : player.getName());
         itemMeta.setLore(lores);
         itemStack.setItemMeta(itemMeta);
@@ -230,9 +231,9 @@ public class ItemKit {
     }
 
     public static void removeTag(List<String> lores) {
-        lores.removeAll(Tag.BindOnUse);
-        lores.removeAll(Tag.BindOnEquip);
-        lores.removeAll(Tag.BindOnPickup);
+        lores.removeAll(Config.Tag.BindOnUse);
+        lores.removeAll(Config.Tag.BindOnEquip);
+        lores.removeAll(Config.Tag.BindOnPickup);
     }
 
     public static ItemStack unbindItem(final ItemStack itemStack) {
@@ -255,10 +256,10 @@ public class ItemKit {
 
     public static int getIndexOfBindTag(final List<String> itemLore) {
         final int index = -1;
-        for (String tag : Tag.Bind) {
+        for (String tag : Config.Tag.Bind) {
             if (itemLore.contains(tag)) { return itemLore.indexOf(tag); }
         }
-        for (String tag : Tag.TimeBind) {
+        for (String tag : Config.Tag.TimeBind) {
             for (String lore : itemLore) {
                 if (lore.startsWith(tag)) { return itemLore.indexOf(lore); }
             }

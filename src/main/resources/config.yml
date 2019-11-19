@@ -1,5 +1,5 @@
 #配置文件版本 请勿修改
-Version: 1.1
+Version: 1.2
 
 #绑定显示样式
 Style:
@@ -42,5 +42,5 @@ Setting:
   DeleteOnDrop: false
   #是否允许放到容器里
   AllowStore: true
-
-
+  #是否允许绑定堆叠物品(物品数量大于1)
+  AllowStack: true

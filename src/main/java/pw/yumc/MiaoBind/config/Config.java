@@ -26,6 +26,8 @@ public class Config extends InjectConfig {
     public Boolean DeleteOnDrop;
     @ConfigNode("Setting.AllowStore")
     public Boolean AllowStore;
+    @ConfigNode("Setting.AllowStack")
+    public Boolean AllowStack;
     @ConfigNode("CheckArmor.Command")
     public List<String> CheckArmorCommand;
 }

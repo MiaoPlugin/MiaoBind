@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>MiaoBind</artifactId>
-    <version>1.2.5</version>
+    <version>1.2.6</version>
 
     <parent>
         <groupId>pw.yumc</groupId>
@@ -22,8 +22,9 @@
     </build>
 
     <properties>
-        <update.description>§a正式版本 §bv1.2.5</update.description>
+        <update.description>§a正式版本 §bv1.2.6</update.description>
         <update.changes>
+            §620-02-16§a fix: 修复多种绑定条件时只生效第一种的问题;
             §619-11-19§a feat: 新增 AllowStack 配置 限制多个物品绑定;
             §619-11-18§a feat: 新增 BindItemEvent 事件 方便其他插件操作;
             §619-11-17§c fix: 修复reload命令 未更新绑定标签的BUG

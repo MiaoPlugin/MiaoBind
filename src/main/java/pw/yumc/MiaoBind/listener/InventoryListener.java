@@ -51,7 +51,12 @@ public class InventoryListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        if (player.isOp()) { return; }
+        if (player.isOp()) {
+            if (!ItemKit.isBoundPlayer(player, itemStack)) {
+                Log.sender(player, "§c当前物品已被绑定 由于您是OP 已忽略限制!");
+            }
+            return;
+        }
         if (!ItemKit.isBoundPlayer(player, itemStack)) {
             Log.sender(player, "§c当前物品已被绑定 非持有者无法获取!");
             event.setResult(Event.Result.DENY);
@@ -131,8 +136,7 @@ public class InventoryListener implements Listener {
                     new CheckArmor(player).runTaskLater(P.instance, 2);
                     return;
                 case CONTAINER:
-                    final ItemKit.ItemType itemType = ItemKit.getItemType(itemStack);
-                    if (itemType == ItemKit.ItemType.BIND_ON_PICKUP) {
+                    if (ItemKit.isBindOnUse(itemStack)) {
                         ItemKit.bindItem(player, itemStack);
                     }
                 default:

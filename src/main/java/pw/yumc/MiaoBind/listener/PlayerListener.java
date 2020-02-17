@@ -63,21 +63,17 @@ public class PlayerListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
         if (item == null || item.getType() == Material.AIR) { return; }
-        switch (ItemKit.getItemType(item)) {
-            case MiaoTimeBind:
-                if (ItemKit.isInvalidItem(item)) {
-                    item.setType(Material.AIR);
-                }
-                break;
-            case BIND_ON_USE:
-                ItemKit.bindItem(event.getPlayer(), item);
-                break;
-            case BIND_ON_EQUIP:
-                if (ItemKit.ArmorKit.isEquipable(item)) {
-                    new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
-                }
-                break;
-            default:
+        if (ItemKit.isBindOnTime(item)) {
+            if (ItemKit.isInvalidItem(item)) {
+                item.setType(Material.AIR);
+            }
+            return;
+        }
+        if (ItemKit.isBindOnUse((item))) {
+            ItemKit.bindItem(event.getPlayer(), item);
+        }
+        if (ItemKit.isBindOnEquip((item)) && ItemKit.ArmorKit.isEquipable(item)) {
+            new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
         }
     }
 

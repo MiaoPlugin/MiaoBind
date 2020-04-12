@@ -1,20 +1,19 @@
 package pw.yumc.MiaoBind.kit;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.event.BindItemEvent;
 import pw.yumc.YumCore.bukkit.Log;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 public class ItemKit {
     private static String TimeTag = "§卐 ";
@@ -25,20 +24,32 @@ public class ItemKit {
     }
 
     public static ItemStack boeItem(final ItemStack itemStack) {
-        if (itemStack == null) { return null; }
-        if (isBindOnEquip(itemStack)) { return itemStack; }
+        if (itemStack == null) {
+            return null;
+        }
+        if (isBindOnEquip(itemStack)) {
+            return itemStack;
+        }
         return addTag(itemStack, Config.Tag.BindOnEquip.get(0));
     }
 
     public static ItemStack bopItem(final ItemStack itemStack) {
-        if (itemStack == null) { return null; }
-        if (isBindOnPickup(itemStack)) { return itemStack; }
+        if (itemStack == null) {
+            return null;
+        }
+        if (isBindOnPickup(itemStack)) {
+            return itemStack;
+        }
         return addTag(itemStack, Config.Tag.BindOnPickup.get(0));
     }
 
     public static ItemStack bouItem(final ItemStack itemStack) {
-        if (itemStack == null) { return null; }
-        if (isBindOnUse(itemStack)) { return itemStack; }
+        if (itemStack == null) {
+            return null;
+        }
+        if (isBindOnUse(itemStack)) {
+            return itemStack;
+        }
         return addTag(itemStack, Config.Tag.BindOnUse.get(0));
     }
 
@@ -100,7 +111,9 @@ public class ItemKit {
             List<String> lores = itemStack.getItemMeta().getLore();
             for (String tag : Config.Tag.TimeBind) {
                 for (String lore : lores) {
-                    if (lore.startsWith(tag)) { return lores.indexOf(lore); }
+                    if (lore.startsWith(tag)) {
+                        return lores.indexOf(lore);
+                    }
                 }
             }
         } catch (NullPointerException ignored) {
@@ -113,7 +126,9 @@ public class ItemKit {
         try {
             List<String> lores = itemStack.getItemMeta().getLore();
             for (String tag : tags) {
-                if (lores.contains(tag)) { return true; }
+                if (lores.contains(tag)) {
+                    return true;
+                }
             }
         } catch (NullPointerException ignored) {
         }
@@ -131,8 +146,7 @@ public class ItemKit {
     /**
      * 判断物品是否有效
      *
-     * @param itemStack
-     *         物品
+     * @param itemStack 物品
      * @return 是否有效
      */
     public static boolean isInvalidItem(final ItemStack itemStack) {
@@ -143,8 +157,7 @@ public class ItemKit {
     /**
      * 获得物品过期时间戳
      *
-     * @param itemStack
-     *         物品
+     * @param itemStack 物品
      * @return 绑定时间 <br>
      * -1 错误的格式<br>
      * 0 非时间绑定
@@ -167,8 +180,12 @@ public class ItemKit {
     }
 
     public static ItemStack bindItem(final Player player, ItemStack itemStack) {
-        if (itemStack == null) { return null; }
-        if (isBind(itemStack)) { return itemStack; }
+        if (itemStack == null) {
+            return null;
+        }
+        if (isBind(itemStack)) {
+            return itemStack;
+        }
         Log.d("玩家 %s 绑定物品 %s", player, itemStack);
         final BindItemEvent bindItemEvent = new BindItemEvent(player, itemStack);
         Bukkit.getPluginManager().callEvent(bindItemEvent);
@@ -197,13 +214,19 @@ public class ItemKit {
     }
 
     public static ItemStack bindTimeItem(final Player player, ItemStack itemStack, String time) {
-        if (itemStack == null) { return null; }
-        if (isBind(itemStack)) { return itemStack; }
+        if (itemStack == null) {
+            return null;
+        }
+        if (isBind(itemStack)) {
+            return itemStack;
+        }
         Log.d("玩家 %s 绑定时限物品 %s", player, itemStack);
         final BindItemEvent bindItemEvent = new BindItemEvent(player, itemStack);
         Bukkit.getPluginManager().callEvent(bindItemEvent);
         itemStack = bindItemEvent.getItemStack();
-        if (bindItemEvent.isCancelled()) { return itemStack; }
+        if (bindItemEvent.isCancelled()) {
+            return itemStack;
+        }
         List<String> lores = new ArrayList<>();
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null) {
@@ -237,13 +260,17 @@ public class ItemKit {
     }
 
     public static ItemStack unbindItem(final ItemStack itemStack) {
-        if (itemStack == null) { return null; }
+        if (itemStack == null) {
+            return null;
+        }
         Log.d("解绑物品 %s", itemStack);
         final ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta.hasLore() && isBind(itemStack)) {
             List<String> itemLore = new ArrayList<>(itemMeta.getLore());
             final int index = getIndexOfBindTag(itemLore);
-            if (index == -1) { return itemStack; }
+            if (index == -1) {
+                return itemStack;
+            }
             itemLore.remove(index);
             if (index < itemLore.size()) {
                 itemLore.remove(index);
@@ -257,11 +284,15 @@ public class ItemKit {
     public static int getIndexOfBindTag(final List<String> itemLore) {
         final int index = -1;
         for (String tag : Config.Tag.Bind) {
-            if (itemLore.contains(tag)) { return itemLore.indexOf(tag); }
+            if (itemLore.contains(tag)) {
+                return itemLore.indexOf(tag);
+            }
         }
         for (String tag : Config.Tag.TimeBind) {
             for (String lore : itemLore) {
-                if (lore.startsWith(tag)) { return itemLore.indexOf(lore); }
+                if (lore.startsWith(tag)) {
+                    return itemLore.indexOf(lore);
+                }
             }
         }
         return index;
@@ -293,31 +324,46 @@ public class ItemKit {
 
     public static class ArmorKit {
         private static List<Material> IronArmor = Arrays.asList(Material.IRON_BOOTS,
-                                                                Material.IRON_CHESTPLATE,
-                                                                Material.IRON_HELMET,
-                                                                Material.IRON_LEGGINGS);
-        private static List<Material> GoldArmor = Arrays.asList(Material.GOLD_BOOTS,
-                                                                Material.GOLD_CHESTPLATE,
-                                                                Material.GOLD_HELMET,
-                                                                Material.GOLD_LEGGINGS);
+                Material.IRON_CHESTPLATE,
+                Material.IRON_HELMET,
+                Material.IRON_LEGGINGS);
+
+        private static List<Material> GoldArmor;
+        private static Material SKULL_ITEM;
+
+        static {
+            try {
+                GoldArmor = Arrays.asList(Material.GOLD_BOOTS,
+                        Material.GOLD_CHESTPLATE,
+                        Material.GOLD_HELMET,
+                        Material.GOLD_LEGGINGS);
+                SKULL_ITEM = Material.SKULL_ITEM;
+            } catch (Throwable ex) {
+                GoldArmor = Arrays.asList(Material.getMaterial("GOLDEN_BOOTS"),
+                        Material.getMaterial("GOLDEN_CHESTPLATE"),
+                        Material.getMaterial("GOLDEN_HELMET"),
+                        Material.getMaterial("GOLDEN_LEGGINGS"));
+                SKULL_ITEM = Material.getMaterial("LEGACY_SKULL_ITEM");
+            }
+        }
+
         private static List<Material> DiamondArmor = Arrays.asList(Material.DIAMOND_BOOTS,
-                                                                   Material.DIAMOND_CHESTPLATE,
-                                                                   Material.DIAMOND_HELMET,
-                                                                   Material.DIAMOND_LEGGINGS);
+                Material.DIAMOND_CHESTPLATE,
+                Material.DIAMOND_HELMET,
+                Material.DIAMOND_LEGGINGS);
         private static List<Material> LeatherArmor = Arrays.asList(Material.LEATHER_BOOTS,
-                                                                   Material.LEATHER_CHESTPLATE,
-                                                                   Material.LEATHER_HELMET,
-                                                                   Material.LEATHER_LEGGINGS);
+                Material.LEATHER_CHESTPLATE,
+                Material.LEATHER_HELMET,
+                Material.LEATHER_LEGGINGS);
         private static List<Material> ChainmailArmor = Arrays.asList(Material.CHAINMAIL_BOOTS,
-                                                                     Material.CHAINMAIL_CHESTPLATE,
-                                                                     Material.CHAINMAIL_HELMET,
-                                                                     Material.CHAINMAIL_LEGGINGS);
+                Material.CHAINMAIL_CHESTPLATE,
+                Material.CHAINMAIL_HELMET,
+                Material.CHAINMAIL_LEGGINGS);
 
         /**
          * Checks to see if an item is a chainmail armor piece.
          *
-         * @param is
-         *         Item to check
+         * @param is Item to check
          * @return true if the item is chainmail armor, false otherwise
          */
         public static boolean isChainmailArmor(final ItemStack is) {
@@ -327,8 +373,7 @@ public class ItemKit {
         /**
          * Checks to see if an item is a diamond armor piece.
          *
-         * @param is
-         *         Item to check
+         * @param is Item to check
          * @return true if the item is diamond armor, false otherwise
          */
         public static boolean isDiamondArmor(final ItemStack is) {
@@ -338,8 +383,7 @@ public class ItemKit {
         /**
          * Checks to see if an item is a gold armor piece.
          *
-         * @param is
-         *         Item to check
+         * @param is Item to check
          * @return true if the item is gold armor, false otherwise
          */
         public static boolean isGoldArmor(final ItemStack is) {
@@ -349,8 +393,7 @@ public class ItemKit {
         /**
          * Checks to see if an item is an iron armor piece.
          *
-         * @param is
-         *         Item to check
+         * @param is Item to check
          * @return true if the item is iron armor, false otherwise
          */
         public static boolean isIronArmor(final ItemStack is) {
@@ -360,8 +403,7 @@ public class ItemKit {
         /**
          * Checks to see if an item is a leather armor piece.
          *
-         * @param is
-         *         Item to check
+         * @param is Item to check
          * @return true if the item is leather armor, false otherwise
          */
         public static boolean isLeatherArmor(final ItemStack is) {
@@ -371,8 +413,7 @@ public class ItemKit {
         /**
          * Checks to see if an item is a wearable armor piece.
          *
-         * @param is
-         *         Item to check
+         * @param is Item to check
          * @return true if the item is armor, false otherwise
          */
         public static boolean isMinecraftArmor(final ItemStack is) {
@@ -382,13 +423,12 @@ public class ItemKit {
         /**
          * Checks to see if an item is an equipable item.
          *
-         * @param is
-         *         Item to check
+         * @param is Item to check
          * @return true if the item is equipable, false otherwise
          */
         public static boolean isEquipable(final ItemStack is) {
             return !(is == null || is.getType() == Material.AIR) &&
-                   (isMinecraftArmor(is) || is.getType() == Material.SKULL_ITEM || is.getType() == Material.JACK_O_LANTERN);
+                    (isMinecraftArmor(is) || is.getType() == SKULL_ITEM || is.getType() == Material.JACK_O_LANTERN);
         }
     }
 }

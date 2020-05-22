@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>MiaoBind</artifactId>
-    <version>1.2.8</version>
+    <version>1.2.9</version>
 
     <parent>
         <groupId>pw.yumc</groupId>
@@ -22,8 +22,9 @@
     </build>
 
     <properties>
-        <update.description>§a正式版本 §bv1.2.8 §a兼容 Spigot 1.15.2</update.description>
+        <update.description>§a正式版本 §bv1.2.9 §c修复新版刷物品问题</update.description>
         <update.changes>
+            §620-05-22§c 修复: 1.13+ 新出的装备存在刷物品的问题;
             §620-04-12§c 修复: 1.13+ 装备判断报错的问题;
             §620-04-09§c 修复: 1.13-1.15.2新增物品不兼容的问题;
             §620-02-16§a fix: 修复多种绑定条件时只生效第一种的问题;

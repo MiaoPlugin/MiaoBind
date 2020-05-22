@@ -18,6 +18,6 @@ public class SwapHandItemListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onSwitchHand(PlayerSwapHandItemsEvent event) {
-        new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
+        new CheckArmor(event.getPlayer()).run();
     }
 }

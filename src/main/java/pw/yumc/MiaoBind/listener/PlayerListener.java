@@ -73,7 +73,7 @@ public class PlayerListener implements Listener {
             ItemKit.bindItem(event.getPlayer(), item);
         }
         if (ItemKit.isBindOnEquip((item)) && ItemKit.ArmorKit.isEquipable(item)) {
-            new CheckArmor(event.getPlayer()).runTaskAsynchronously(P.instance);
+            new CheckArmor(event.getPlayer()).runTask(P.instance);
         }
     }
 

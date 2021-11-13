@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.event.BindItemEvent;
+import pw.yumc.YumCore.annotation.NotProguard;
 import pw.yumc.YumCore.bukkit.Log;
 
 import java.text.ParseException;
@@ -15,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+@NotProguard
 public class ItemKit {
     private static String TimeTag = "§卐 ";
     private static Config Config;

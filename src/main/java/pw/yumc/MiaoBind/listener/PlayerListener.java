@@ -8,20 +8,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.CheckArmor;
 import pw.yumc.MiaoBind.runnable.UpdateInventory;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
+import pw.yumc.YumCore.statistic.Statistics;
+import pw.yumc.YumCore.update.SubscribeTask;
 
 /**
  * @author MiaoWoo
@@ -37,6 +34,8 @@ public class PlayerListener implements Listener {
             sound = Sound.valueOf("ITEM_BREAK");
         }
         Bukkit.getPluginManager().registerEvents(this, P.instance);
+        new Statistics();
+        new SubscribeTask(true, SubscribeTask.UpdateType.MAVEN);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -62,7 +61,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEvent event) {
         ItemStack item = event.getItem();
-        if (item == null || item.getType() == Material.AIR) { return; }
+        if (item == null || item.getType() == Material.AIR) {return;}
         if (ItemKit.isBindOnTime(item)) {
             if (ItemKit.isInvalidItem(item)) {
                 item.setType(Material.AIR);
@@ -80,7 +79,7 @@ public class PlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onItemDrop(final PlayerDropItemEvent event) {
         final Player player = event.getPlayer();
-        if (!player.isValid()) { return; }
+        if (!player.isValid()) {return;}
         final Item item = event.getItemDrop();
         final ItemStack itemStack = item.getItemStack();
         Log.d("[PlayerDropItemEvent] 玩家 %s 丢弃物品 %s", player.getName(), itemStack);

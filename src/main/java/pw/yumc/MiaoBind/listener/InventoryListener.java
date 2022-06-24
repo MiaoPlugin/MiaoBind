@@ -1,7 +1,5 @@
 package pw.yumc.MiaoBind.listener;
 
-import java.util.Optional;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -11,20 +9,17 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.EnchantItemEvent;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryPickupItemEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.inventory.InventoryType.SlotType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.kit.ItemKit;
 import pw.yumc.MiaoBind.runnable.CheckArmor;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
+
+import java.util.Optional;
 
 /**
  * @author MiaoWoo
@@ -39,11 +34,17 @@ public class InventoryListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onInventoryClickEvent(final InventoryClickEvent event) {
         final HumanEntity entity = event.getWhoClicked();
-        if (!(entity instanceof Player)) { return; }
+        if (!(entity instanceof Player)) {return;}
         final Player player = (Player) entity;
-        final ItemStack itemStack = event.getCurrentItem();
+        ItemStack itemStack = event.getCurrentItem();
         ItemKit.ItemType itemType = ItemKit.getItemType(itemStack);
-        if (itemType != ItemKit.ItemType.MiaoBind && itemType != ItemKit.ItemType.MiaoTimeBind) { return; }
+        if (itemType != ItemKit.ItemType.MiaoBind && itemType != ItemKit.ItemType.MiaoTimeBind) {
+            if (!event.getAction().name().startsWith("HOTBAR")) {return;}
+            itemStack = player.getInventory().getItem(event.getHotbarButton());
+            Log.d("Action: %s Item: %s", event.getAction().name(), itemStack);
+            itemType = ItemKit.getItemType(itemStack);
+            if (itemType != ItemKit.ItemType.MiaoBind && itemType != ItemKit.ItemType.MiaoTimeBind) {return;}
+        }
         if (player.getInventory().firstEmpty() == -1) {
             Log.d("[InventoryListener onInventoryClickEvent] notFirstEmpty");
             Log.sender(player, "§c背包已满的情况下禁止点击绑定物品 防止物品意外丢失!");
@@ -91,8 +92,7 @@ public class InventoryListener implements Listener {
     /**
      * Check EnchantItemEvent events.
      *
-     * @param event
-     *         The event to check
+     * @param event The event to check
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEnchantItem(final EnchantItemEvent event) {
@@ -123,9 +123,9 @@ public class InventoryListener implements Listener {
         ItemStack itemStack = event.getCursor();
         SlotType slotType = event.getSlotType();
         InventoryAction action = event.getAction();
-        Log.d("InventoryClickEvent Action: %s Click: %s SlotType: %s Slot: %s RawSlot: %s",
-              action.name(), event.getClick().name(), slotType.name(),
-              event.getSlot(), event.getRawSlot());
+        Log.d("InventoryClickEvent Action: %s Click: %s SlotType: %s Slot: %s RawSlot: %s HotbarButton: %s",
+                action.name(), event.getClick().name(), slotType.name(),
+                event.getSlot(), event.getRawSlot(), event.getHotbarButton());
         if (itemStack == null || itemStack.getType() == Material.AIR) {
             itemStack = event.getCurrentItem();
         }

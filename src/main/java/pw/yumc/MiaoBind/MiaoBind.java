@@ -4,16 +4,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import pw.yumc.MiaoBind.config.Config;
 import pw.yumc.MiaoBind.config.Data;
 import pw.yumc.MiaoBind.kit.ItemKit;
-import pw.yumc.MiaoBind.listener.ArmorStandListener;
-import pw.yumc.MiaoBind.listener.DeathListener;
-import pw.yumc.MiaoBind.listener.InventoryListener;
-import pw.yumc.MiaoBind.listener.PlayerListener;
-import pw.yumc.MiaoBind.listener.SelfListener;
-import pw.yumc.MiaoBind.listener.SwapHandItemListener;
+import pw.yumc.MiaoBind.listener.*;
 import pw.yumc.MiaoBind.runnable.UpdateInventory;
 import pw.yumc.YumCore.bukkit.Log;
 import pw.yumc.YumCore.bukkit.P;
@@ -22,8 +16,6 @@ import pw.yumc.YumCore.commands.CommandSub;
 import pw.yumc.YumCore.commands.annotation.Cmd;
 import pw.yumc.YumCore.commands.annotation.Help;
 import pw.yumc.YumCore.commands.interfaces.Executor;
-import pw.yumc.YumCore.statistic.Statistics;
-import pw.yumc.YumCore.update.SubscribeTask;
 
 public class MiaoBind extends JavaPlugin implements Executor {
     private Data data;
@@ -53,8 +45,6 @@ public class MiaoBind extends JavaPlugin implements Executor {
             new SwapHandItemListener();
         } catch (Exception ignored) {
         }
-        new Statistics();
-        new SubscribeTask(true, SubscribeTask.UpdateType.MAVEN);
     }
 
     @Override

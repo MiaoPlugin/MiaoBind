@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>MiaoBind</artifactId>
-    <version>1.3.0</version>
+    <version>1.3.2</version>
 
     <parent>
         <groupId>pw.yumc</groupId>
@@ -22,8 +22,12 @@
     </build>
 
     <properties>
-        <update.description>§a正式版本 §bv1.3.0 §a保留 ItemKit 不混淆 用于其他插件</update.description>
+        <update.description>§a正式版本 §bv1.3.1 §a更新: 兼容 1.18.2 1.19 版本</update.description>
         <update.changes>
+            §622-06-24§a 更新: 兼容 1.18.2 1.19 版本;
+            §621-12-07§c 修复: 修复数字键可以存放绑定物品的问题
+        </update.changes>
+        <update.changelog>
             §621-11-13§a 更新: 保留 ItemKit 不混淆 用于其他插件;
             §620-05-22§c 修复: 1.13+ 新出的装备存在刷物品的问题;
             §620-04-12§c 修复: 1.13+ 装备判断报错的问题;
@@ -31,9 +35,7 @@
             §620-02-16§a fix: 修复多种绑定条件时只生效第一种的问题;
             §619-11-19§a feat: 新增 AllowStack 配置 限制多个物品绑定;
             §619-11-18§a feat: 新增 BindItemEvent 事件 方便其他插件操作;
-            §619-11-17§c fix: 修复reload命令 未更新绑定标签的BUG
-        </update.changes>
-        <update.changelog>
+            §619-11-17§c fix: 修复reload命令 未更新绑定标签的BUG;
             §619-10-30§c fix: 修复时间绑定物品可以被他人拾取的BUG;
             §619-10-29§c fix: 修复部分命令报错的问题;
             §619-10-28§c fix: 修复其他玩家可以从箱子获取非自己绑定的BUG;

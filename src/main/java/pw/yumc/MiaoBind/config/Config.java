@@ -1,16 +1,18 @@
 package pw.yumc.MiaoBind.config;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
 import pw.yumc.YumCore.config.annotation.ConfigNode;
 import pw.yumc.YumCore.config.annotation.ReadOnly;
 import pw.yumc.YumCore.config.inject.InjectConfig;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * @author MiaoWoo
  */
 public class Config extends InjectConfig {
+    @ConfigNode("Prefix")
+    public String Prefix;
     @ConfigNode("Style.HideName")
     public Boolean HideName;
     @ReadOnly

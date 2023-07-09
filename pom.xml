@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>MiaoBind</artifactId>
-    <version>1.3.2</version>
+    <version>1.3.4</version>
 
     <parent>
         <groupId>pw.yumc</groupId>
@@ -22,8 +22,10 @@
     </build>
 
     <properties>
-        <update.description>§a正式版本 §bv1.3.1 §a更新: 兼容 1.18.2 1.19 版本</update.description>
+        <update.description>§a正式版本 §bv1.3.4 §a更新: 兼容 1.18.2 1.19 版本</update.description>
         <update.changes>
+            §622-08-23§a 更新: 新增前缀修改 再次优化漏斗传输检测逻辑;
+            §622-08-18§a 更新: 优化漏斗传输检测逻辑;
             §622-06-24§a 更新: 兼容 1.18.2 1.19 版本;
             §621-12-07§c 修复: 修复数字键可以存放绑定物品的问题
         </update.changes>

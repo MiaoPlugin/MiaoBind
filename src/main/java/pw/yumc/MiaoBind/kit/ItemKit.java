@@ -109,30 +109,26 @@ public class ItemKit {
     }
 
     public static int getBindTimeIndex(final ItemStack itemStack) {
-        try {
-            List<String> lores = itemStack.getItemMeta().getLore();
-            for (String tag : Config.Tag.TimeBind) {
-                for (String lore : lores) {
-                    if (lore.startsWith(tag)) {
-                        return lores.indexOf(lore);
-                    }
+        if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasLore()) {return -1;}
+        List<String> lores = itemStack.getItemMeta().getLore();
+        for (String tag : Config.Tag.TimeBind) {
+            for (String lore : lores) {
+                if (lore.startsWith(tag)) {
+                    return lores.indexOf(lore);
                 }
             }
-        } catch (NullPointerException ignored) {
         }
         return -1;
     }
 
     public static boolean isBindOnTag(final ItemStack itemStack, List<String> tags) {
+        if (itemStack == null || !itemStack.hasItemMeta() || !itemStack.getItemMeta().hasLore()) {return false;}
         Log.d("判断物品: %s 判断标签: %s", itemStack, tags);
-        try {
-            List<String> lores = itemStack.getItemMeta().getLore();
-            for (String tag : tags) {
-                if (lores.contains(tag)) {
-                    return true;
-                }
+        List<String> lores = itemStack.getItemMeta().getLore();
+        for (String tag : tags) {
+            if (lores.contains(tag)) {
+                return true;
             }
-        } catch (NullPointerException ignored) {
         }
         return false;
     }

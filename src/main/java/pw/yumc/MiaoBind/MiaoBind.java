@@ -33,12 +33,14 @@ public class MiaoBind extends JavaPlugin implements Executor {
 
     @Override
     public void onEnable() {
+        Log.setPrefix(config.Prefix);
         main = new CommandMain(new Command(config));
         new CommandSub("MiaoBind", this);
         new DeathListener(data);
         new ArmorStandListener();
         new PlayerListener();
         new InventoryListener();
+        new InventoryTransferListener();
         new SelfListener();
         try {
             Class.forName("org.bukkit.event.player.PlayerSwapHandItemsEvent");

@@ -71,24 +71,6 @@ public class InventoryListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onInventoryMoveEvent(final InventoryMoveItemEvent event) {
-        final ItemStack itemStack = event.getItem();
-        final ItemKit.ItemType itemType = ItemKit.getItemType(itemStack);
-        if (itemType == ItemKit.ItemType.MiaoBind) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onInventoryPickupItemEvent(final InventoryPickupItemEvent event) {
-        final ItemStack itemStack = event.getItem().getItemStack();
-        final ItemKit.ItemType itemType = ItemKit.getItemType(itemStack);
-        if (itemType == ItemKit.ItemType.MiaoBind) {
-            event.setCancelled(true);
-        }
-    }
-
     /**
      * Check EnchantItemEvent events.
      *
